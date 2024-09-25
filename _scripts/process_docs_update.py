@@ -132,16 +132,22 @@ def copy_directory(source_path_prefix: str, destination_path_prefix: str):
     shutil.copytree(source_path_prefix, destination_path_prefix)
 
 
-def copy_navigation(config: dict, source_version: str, destination_version: str):
+def copy_navigation(config: dict, source_version: str):
+    """
+    Copy the navigation from the source version.
+
+    Args:
+        config (dict): The config to copy the navigation from.
+        source_version (str): The source version.
+    """
     new_groups = []
     for nav in config["navigation"]:
         if nav["version"] == source_version:
             new_group = copy.deepcopy(nav)
             new_group["pages"] = [
-                process_page(page, f"v/{destination_version}", "latest")
+                process_page(page, f"v/{source_version}", "latest")
                 for page in new_group["pages"]
             ]
-            new_group["version"] = destination_version
             new_groups.append(new_group)
     config["navigation"] = new_groups + config["navigation"]  # Prepend new_groups
 
@@ -219,8 +225,8 @@ def process_docs_update(version):
         destination_path_prefix = "latest"
         latest_version = get_latest_version(config["versions"])
         if latest_version:
-            copy_directory("latest", destination_path_prefix)
-            copy_navigation(config, latest_version, version)
+            copy_directory("latest", f"v/{latest_version}")
+            copy_navigation(config, latest_version)
         config["versions"].insert(0, version)
         # This means this is a new version
         print(f"Processing new version: {version}")
