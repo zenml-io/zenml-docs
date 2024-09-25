@@ -4,6 +4,51 @@ import os
 import zipfile
 import shutil
 import copy
+from packaging import version
+
+
+def is_biggest_version(version, versions):
+    """
+    Check if the version is the biggest version.
+
+    Args:
+        version (str): The version to check.
+        versions (list): The list of versions.
+
+    Returns:
+        bool: True if the version is the biggest version, False otherwise.
+    """
+    versions.append(version)
+    sorted_versions = sort_versions(versions)
+    # Remove develop
+    sorted_versions = [v for v in sorted_versions if v != "develop"]
+    return version == sorted_versions[0]
+
+
+def sort_versions(versions):
+    def version_key(v):
+        if v == "develop":
+            return (
+                version.parse("99999.99999.99999"),
+                v,
+            )  # Use a very high version for 'develop'
+        try:
+            return (version.parse(v), v)
+        except version.InvalidVersion:
+            return (version.parse("0.0.0"), v)  # Place invalid versions at the start
+
+    sorted_versions = sorted(versions, key=version_key)
+
+    # Move 'develop' next to the highest version if it exists
+    if "develop" in sorted_versions:
+        develop_index = sorted_versions.index("develop")
+        if (
+            develop_index != len(sorted_versions) - 1
+        ):  # If 'develop' is not already at the end
+            sorted_versions.insert(-1, sorted_versions.pop(develop_index))
+
+    sorted_versions.reverse()
+    return sorted_versions
 
 
 def get_latest_version(versions):
@@ -256,20 +301,25 @@ def process_docs_update(version):
         cleanup_directory(destination_path_prefix)
         cleanup_config(config, version)
     elif version not in config["versions"]:
-        destination_path_prefix = "latest"
-        latest_version = get_latest_version(config["versions"])
-        print(f"Latest version: {latest_version}")
-        if latest_version:
-            copy_directory("latest", f"v/{latest_version}")
-            copy_config(config, latest_version)
+        if is_biggest_version(version, copy.deepcopy(config["versions"])):
+            destination_path_prefix = "latest"
+            latest_version = get_latest_version(config["versions"])
+            print(f"Latest version: {latest_version}")
+            if latest_version:
+                copy_directory("latest", f"v/{latest_version}")
+                copy_config(config, latest_version)
+        else:
+            destination_path_prefix = f"v/{version}"
+
         config["versions"].insert(0, version)
-        # This means this is a new version
-        print(f"Processing new version: {version}")
 
     extract_files(destination_path_prefix)
     process_navigation(source_config, config, destination_path_prefix, version)
     process_anchors(version, source_config, config)
     process_tabs(version, destination_path_prefix, source_config, config)
+
+    # Sort versions
+    config["versions"] = sort_versions(config["versions"])
 
     with open(dest_mint_json, "w") as f:
         json.dump(config, f, indent=2)
