@@ -57,10 +57,10 @@ def extract_files(destination_path_prefix: str):
 
             dir_name = os.path.dirname(dest_path)
 
-        if dir_name != "" and not os.path.exists(dir_name):
-            os.makedirs(dir_name, exist_ok=True)
+            if dir_name != "" and not os.path.exists(dir_name):
+                os.makedirs(dir_name, exist_ok=True)
 
-        shutil.copy2(file_path, dest_path)
+            shutil.copy2(file_path, dest_path)
 
 
 def process_navigation(
@@ -105,12 +105,12 @@ def process_page(page, destination_path_prefix: str, replace_version: str = None
     """
     if isinstance(page, str):
         if replace_version and page.startswith(replace_version):
-            page = page.removeprefix(replace_version)
+            page = page.removeprefix(replace_version + "/")
         return f"{destination_path_prefix}/{page}"
     elif isinstance(page, dict):
         result = {
             "group": page["group"],
-            "pages": [process_page(p, destination_path_prefix) for p in page["pages"]],
+            "pages": [process_page(p, destination_path_prefix, replace_version) for p in page["pages"]],
         }
         if "icon" in page:
             result["icon"] = page["icon"]
@@ -132,7 +132,7 @@ def copy_directory(source_path_prefix: str, destination_path_prefix: str):
     shutil.copytree(source_path_prefix, destination_path_prefix)
 
 
-def copy_navigation(config: dict, source_version: str):
+def copy_config(config: dict, source_version: str):
     """
     Copy the navigation from the source version.
 
@@ -151,6 +151,14 @@ def copy_navigation(config: dict, source_version: str):
             new_groups.append(new_group)
     config["navigation"] = new_groups + config["navigation"]  # Prepend new_groups
 
+    for tab in config["tabs"]:
+        if "openapi" in tab:
+            if tab["openapi"].startswith("/latest"):
+                tab["openapi"] = tab["openapi"].removeprefix("/latest")
+            tab["openapi"] = f"/v/{source_version}{tab['openapi']}"
+        if tab["url"].startswith("/latest"):
+            tab["url"] = tab["url"].removeprefix("/latest")
+        tab["url"] = f"/v/{source_version}{tab['url']}"
 
 def cleanup_directory(destination_path_prefix: str):
     """
@@ -162,7 +170,7 @@ def cleanup_directory(destination_path_prefix: str):
     shutil.rmtree(destination_path_prefix, ignore_errors=True)
 
 
-def cleanup_navigation(config: dict, version: str):
+def cleanup_config(config: dict, version: str):
     """
     Delete all entries in the navigation that are in the version.
 
@@ -173,6 +181,27 @@ def cleanup_navigation(config: dict, version: str):
     config["navigation"] = [
         nav for nav in config["navigation"] if nav["version"] != version
     ]
+    config["tabs"] = [tab for tab in config["tabs"] if tab["version"] != version]
+    config["anchors"] = [
+        anchor for anchor in config["anchors"] if anchor["version"] != version
+    ]
+
+
+def process_tabs(version, destination_path_prefix, source_config, config):
+    if "tabs" in source_config:
+        for tab in source_config["tabs"]:
+            if "openapi" in tab:
+                tab["openapi"] = f"/{destination_path_prefix}{tab['openapi']}"
+            tab["url"] = f"{destination_path_prefix}/{tab['url']}"
+            tab["version"] = version
+            config["tabs"].append(tab)
+
+
+def process_anchors(version, source_config, config):
+    if "anchors" in source_config:
+        for anchor in source_config["anchors"]:
+            anchor["version"] = version
+            config["anchors"].append(anchor)
 
 
 def process_docs_update(version):
@@ -200,9 +229,6 @@ def process_docs_update(version):
         config["navigation"] = []
         config["tabs"] = []
         config["anchors"] = []
-
-    # This means this is the first time ever
-    if "versions" not in config:
         config["versions"] = []
 
     if version == "develop":
@@ -220,13 +246,13 @@ def process_docs_update(version):
             destination_path_prefix = f"v/{version}"
 
         cleanup_directory(destination_path_prefix)
-        cleanup_navigation(config, version)
+        cleanup_config(config, version)
     elif version not in config["versions"]:
         destination_path_prefix = "latest"
         latest_version = get_latest_version(config["versions"])
         if latest_version:
             copy_directory("latest", f"v/{latest_version}")
-            copy_navigation(config, latest_version)
+            copy_config(config, latest_version)
         config["versions"].insert(0, version)
         # This means this is a new version
         print(f"Processing new version: {version}")
@@ -241,23 +267,6 @@ def process_docs_update(version):
 
     # Clean up temporary files
     shutil.rmtree("temp_docs")
-
-
-def process_tabs(version, destination_path_prefix, source_config, config):
-    if "tabs" in source_config:
-        for tab in source_config["tabs"]:
-            if "openapi" in tab:
-                tab["openapi"] = f"/{destination_path_prefix}/{tab['openapi']}"
-            tab["url"] = f"v/{version}/{tab['url']}"
-            tab["version"] = version
-            config["tabs"].append(tab)
-
-
-def process_anchors(version, source_config, config):
-    if "anchors" in source_config:
-        for anchor in source_config["anchors"]:
-            anchor["version"] = version
-            config["anchors"].append(anchor)
 
 
 if __name__ == "__main__":
