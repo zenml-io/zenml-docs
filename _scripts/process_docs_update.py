@@ -16,7 +16,10 @@ def get_latest_version(versions):
     Returns:
         str: The latest version.
     """
-    return versions[0] if versions else None
+    l = [v for v in versions if v != "develop"]
+    if len(l) == 0:
+        return None
+    return l[0]
 
 
 def is_latest_version(version, versions):
@@ -108,7 +111,10 @@ def process_page(page, destination_path_prefix: str, replace_version: str = None
     elif isinstance(page, dict):
         result = {
             "group": page["group"],
-            "pages": [process_page(p, destination_path_prefix, replace_version) for p in page["pages"]],
+            "pages": [
+                process_page(p, destination_path_prefix, replace_version)
+                for p in page["pages"]
+            ],
         }
         if "icon" in page:
             result["icon"] = page["icon"]
@@ -147,7 +153,7 @@ def copy_config(config: dict, source_version: str):
                 for page in new_group["pages"]
             ]
         new_groups.append(new_group)
-    config["navigation"] = new_groups 
+    config["navigation"] = new_groups
 
     for tab in config["tabs"]:
         if "openapi" in tab:
@@ -157,6 +163,7 @@ def copy_config(config: dict, source_version: str):
         if tab["url"].startswith("latest"):
             tab["url"] = tab["url"].removeprefix("latest")
             tab["url"] = f"/v/{source_version}{tab['url']}"
+
 
 def cleanup_directory(destination_path_prefix: str):
     """
@@ -229,9 +236,14 @@ def process_docs_update(version):
         config["anchors"] = []
         config["versions"] = []
 
-
-
-    if version in config["versions"]:
+    if version == "develop":
+        destination_path_prefix = version
+        if version in config["versions"]:
+            cleanup_directory(destination_path_prefix)
+            cleanup_config(config, version)
+        else:
+            config["versions"].insert(0, version)
+    elif version in config["versions"]:
         # This means this is an old version
         print(f"Processing old version: {version}")
         if is_latest_version(version, config["versions"]):
@@ -244,11 +256,7 @@ def process_docs_update(version):
         cleanup_directory(destination_path_prefix)
         cleanup_config(config, version)
     elif version not in config["versions"]:
-        if version == "develop":
-            version = "Bleeding Edge"
-            destination_path_prefix = "bleeding-edge"
-        else:
-            destination_path_prefix = "latest"
+        destination_path_prefix = "latest"
         latest_version = get_latest_version(config["versions"])
         print(f"Latest version: {latest_version}")
         if latest_version:
