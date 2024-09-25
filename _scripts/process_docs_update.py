@@ -321,6 +321,19 @@ def process_docs_update(version):
     # Sort versions
     config["versions"] = sort_versions(config["versions"])
 
+    # Sort navigation
+    a = [
+        n
+        for n in config["navigation"]
+        if n["version"] == get_latest_version(config["versions"])
+    ]
+    b = [
+        n
+        for n in config["navigation"]
+        if n["version"] != get_latest_version(config["versions"])
+    ]
+    config["navigation"] = a + b
+
     with open(dest_mint_json, "w") as f:
         json.dump(config, f, indent=2)
 
