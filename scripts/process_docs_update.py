@@ -49,27 +49,27 @@ def process_docs_update(version):
 
     with open(source_mint_json, "r") as f:
         source_config = json.load(f)
-        
+
     if os.path.exists(dest_mint_json):
         with open(dest_mint_json, "r") as f:
             config = json.load(f)
     else:
-        config = {"navigation": [], "tabs": [], "anchors": []}
-        
-    for root, dirs, files in os.walk("temp_docs"):
+        config = copy.deepcopy(source_config)
+        config["navigation"] = []
+        config["tabs"] = []
+        config["anchors"] = []
+
+    for root, _, files in os.walk("temp_docs"):
         for file in files:
             file_path = os.path.join(root, file)
             relative_path = os.path.relpath(file_path, "temp_docs")
 
-            # Determine the destination path based on file type and location
-            if (
-                file in ["favicon.png", "favicon.svg", "README.md"]
-                or relative_path.startswith("logo/")
-                or relative_path.startswith("images/")
+            # We keep the README and _assets folder at the root for now.
+            if relative_path.startswith("README.md") or relative_path.startswith(
+                "_assets/"
             ):
                 dest_path = relative_path
-            elif file == "openapi.json":
-                dest_path = os.path.join("v", version, relative_path)
+            # For all other files, we put them in a versioned folder.
             else:
                 dest_path = os.path.join("v", version, relative_path)
 
@@ -91,40 +91,28 @@ def process_docs_update(version):
         # Retain all groups from old versions but just add the new navigation with the version tag
         for group in source_config["navigation"]:
             new_group = copy.deepcopy(group)
-            new_group["pages"] = [process_page(page, version) for page in new_group['pages']]
-            new_group["version"] = version 
+            new_group["pages"] = [
+                process_page(page, version) for page in new_group["pages"]
+            ]
+            new_group["version"] = version
             config["navigation"].append(new_group)
     else:
         print("No navigation found in source config")
         raise Exception("No navigation found in source config")
 
-    # Update other fields in the configuration
-    fields_to_update = [
-        "name",
-        "logo",
-        "favicon",
-        "colors",
-        "topbarLinks",
-        "topbarCtaButton",
-        "footerSocials",
-        "feedback",
-        "search",
-    ]
-    for field in fields_to_update:
-        if field in source_config:
-            config[field] = source_config[field]
-            
     if "anchors" in source_config:
         for anchor in source_config["anchors"]:
             anchor["version"] = version
             config["anchors"].append(anchor)
-            
+
     if "tabs" in source_config:
         for tab in source_config["tabs"]:
+            if "openapi" in tab:
+                tab["openapi"] = f"/v/{version}{tab['openapi']}"
             tab["url"] = f"v/{version}/{tab['url']}"
             tab["version"] = version
             config["tabs"].append(tab)
-        
+
     with open(dest_mint_json, "w") as f:
         json.dump(config, f, indent=2)
 
