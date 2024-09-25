@@ -53,8 +53,6 @@ def extract_files(destination_path_prefix: str):
             else:
                 dest_path = os.path.join(destination_path_prefix, relative_path)
 
-            print(f"Processing file: {file_path} -> {dest_path}")
-
             dir_name = os.path.dirname(dest_path)
 
             if dir_name != "" and not os.path.exists(dir_name):
@@ -142,23 +140,23 @@ def copy_config(config: dict, source_version: str):
     """
     new_groups = []
     for nav in config["navigation"]:
+        new_group = copy.deepcopy(nav)
         if nav["version"] == source_version:
-            new_group = copy.deepcopy(nav)
             new_group["pages"] = [
                 process_page(page, f"v/{source_version}", "latest")
                 for page in new_group["pages"]
             ]
-            new_groups.append(new_group)
-    config["navigation"] = new_groups + config["navigation"]  # Prepend new_groups
+        new_groups.append(new_group)
+    config["navigation"] = new_groups 
 
     for tab in config["tabs"]:
         if "openapi" in tab:
             if tab["openapi"].startswith("/latest"):
                 tab["openapi"] = tab["openapi"].removeprefix("/latest")
-            tab["openapi"] = f"/v/{source_version}{tab['openapi']}"
-        if tab["url"].startswith("/latest"):
-            tab["url"] = tab["url"].removeprefix("/latest")
-        tab["url"] = f"/v/{source_version}{tab['url']}"
+                tab["openapi"] = f"/v/{source_version}{tab['openapi']}"
+        if tab["url"].startswith("latest"):
+            tab["url"] = tab["url"].removeprefix("latest")
+            tab["url"] = f"/v/{source_version}{tab['url']}"
 
 def cleanup_directory(destination_path_prefix: str):
     """
@@ -231,9 +229,7 @@ def process_docs_update(version):
         config["anchors"] = []
         config["versions"] = []
 
-    if version == "develop":
-        version = "Bleeding Edge"
-        destination_path_prefix = "bleeding-edge"
+
 
     if version in config["versions"]:
         # This means this is an old version
@@ -248,8 +244,13 @@ def process_docs_update(version):
         cleanup_directory(destination_path_prefix)
         cleanup_config(config, version)
     elif version not in config["versions"]:
-        destination_path_prefix = "latest"
+        if version == "develop":
+            version = "Bleeding Edge"
+            destination_path_prefix = "bleeding-edge"
+        else:
+            destination_path_prefix = "latest"
         latest_version = get_latest_version(config["versions"])
+        print(f"Latest version: {latest_version}")
         if latest_version:
             copy_directory("latest", f"v/{latest_version}")
             copy_config(config, latest_version)
