@@ -6,6 +6,31 @@ import shutil
 import copy
 
 
+def get_latest_version(versions):
+    """
+    Get the latest version from the list of versions.
+
+    Args:
+        versions (list): The list of versions.
+
+    Returns:
+        str: The latest version.
+    """
+    return versions[0]
+
+def is_latest_version(version, versions):
+    """
+    Check if the version is the latest version.
+
+    Args:
+        version (str): The version to check.
+        versions (list): The list of versions.
+        
+    Returns:
+        bool: True if the version is the latest version, False otherwise.
+    """
+    return version == get_latest_version(versions)
+
 def process_page(page, version):
     """
     Recursively process a page or group of pages to include the version in their paths.
@@ -43,7 +68,7 @@ def process_docs_update(version):
     with zipfile.ZipFile("docs_data.zip", "r") as zip_ref:
         zip_ref.extractall("temp_docs")
 
-    os.makedirs("temp_docs", exist_ok=True)
+    # We need to make sure that the version we are processing is the latest version.
     source_mint_json = os.path.join("temp_docs", "mint.json")
     dest_mint_json = "mint.json"
 
@@ -59,6 +84,19 @@ def process_docs_update(version):
         config["tabs"] = []
         config["anchors"] = []
 
+    if version == "develop":
+        version = "Bleeding Edge"
+    elif version in source_config["versions"]:
+        # This means this is an old version
+        print(f"Processing old version: {version}")
+    elif version not in source_config["versions"]:
+        # This means this is a new version
+        print(f"Processing new version: {version}")
+
+
+
+    # Copy files to the destination
+    os.makedirs("temp_docs", exist_ok=True)
     for root, _, files in os.walk("temp_docs"):
         for file in files:
             file_path = os.path.join(root, file)
