@@ -89,13 +89,15 @@ def process_docs_update(version):
 
     if "navigation" in source_config:
         # Retain all groups from old versions but just add the new navigation with the version tag
+        new_groups = []
         for group in source_config["navigation"]:
             new_group = copy.deepcopy(group)
             new_group["pages"] = [
                 process_page(page, version) for page in new_group["pages"]
             ]
             new_group["version"] = version
-            config["navigation"].append(new_group)
+            new_groups.append(new_group)
+        config["navigation"] = new_groups + config["navigation"]  # Prepend new_groups
     else:
         print("No navigation found in source config")
         raise Exception("No navigation found in source config")
