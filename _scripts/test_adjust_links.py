@@ -26,14 +26,42 @@ def test_html_links():
     assert extract_links(content) == expected
 
 
+def test_card_links():
+    content = """
+    <Card title="Example Card" icon="info" href="https://example.com" horizontal />
+    Another card link <Card title="Another Card" icon="star" href="https://example.org" horizontal />.
+    """
+    expected = [
+        ("Card", None, "https://example.com"),
+        ("Card", None, "https://example.org"),
+    ]
+    assert extract_links(content) == expected
+
+
+def test_custom_tag_links():
+    content = """
+    <CustomTag title="Custom Tag" href="https://example.com" />
+    Another custom tag <AnotherTag href="https://example.org" class="custom-class" />.
+    """
+    expected = [
+        ("CustomTag", None, "https://example.com"),
+        ("AnotherTag", None, "https://example.org"),
+    ]
+    assert extract_links(content) == expected
+
+
 def test_mixed_links():
     content = """
     Here is a [markdown link](https://example.com).
     And here is an <a href="https://example.org">HTML link</a>.
+    And here is a <Card title="Example Card" icon="info" href="https://example.net" horizontal />.
+    And here is a <CustomTag title="Custom Tag" href="https://example.org" />.
     """
     expected = [
         ("markdown", "markdown link", "https://example.com"),
         ("html", None, "https://example.org"),
+        ("Card", None, "https://example.net"),
+        ("CustomTag", None, "https://example.org"),
     ]
     assert extract_links(content) == expected
 
@@ -90,6 +118,15 @@ def test_invalid_html_links():
     content = """
     Here is an invalid HTML link <a href=https://example.com">missing quote</a>.
     Another one <a>https://example.org</a> with no href attribute.
+    """
+    expected = []
+    assert extract_links(content) == expected
+
+
+def test_general_invalid_tags():
+    content = """
+    Here is an invalid custom tag <CustomTag href=https://example.com">missing quote</CustomTag>.
+    Another invalid tag <AnotherTag>https://example.org</AnotherTag> without href attribute.
     """
     expected = []
     assert extract_links(content) == expected
