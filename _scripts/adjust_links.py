@@ -36,18 +36,22 @@ def find_links_in_mdx_files(root_dir, prefix=None):
                         content = f.read()
                         links = extract_links(content)
                         if prefix:
-                            for link_type, link_text, link_url in links:
-                                if link_type == "markdown":
+                            for link_type, _, link_url in links:
+                                if (
+                                    link_type == "markdown"
+                                    # ignore external links
+                                    and "://" not in link_url
+                                    # ignore links that already have the prefix
+                                    and not link_url.startswith(prefix)
+                                ):
                                     new_link = f"{prefix}{link_url}"
                                     content = content.replace(
                                         f"({link_url})", f"({new_link})"
                                     )
-                                elif link_type == "html":
-                                    pass
                             with open(filepath, "w", encoding="utf-8") as f:
                                 f.write(content)
                         else:
-                            for link_type, link_text, link_url in links:
+                            for link_type, _, link_url in links:
                                 if link_type == "markdown":
                                     print(
                                         f"File: {filepath}\nMarkdown Link: {link_url}\n"
