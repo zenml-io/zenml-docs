@@ -6,6 +6,7 @@ import shutil
 import copy
 from typing import List, Dict, Union, Optional, Any
 from packaging import version
+from adjust_links import find_links_in_mdx_files
 
 
 def is_biggest_version(version: str, versions: List[str]) -> bool:
@@ -319,6 +320,7 @@ def process_docs_update(version: str) -> None:
             config["versions"].insert(0, version)
 
         # add destination_path_prefix
+        find_links_in_mdx_files(destination_path_prefix, f"/{destination_path_prefix}")
     elif version in config["versions"]:
         print(f"Processing old version: {version}")
         if is_latest_version(version, config["versions"]):
@@ -330,6 +332,7 @@ def process_docs_update(version: str) -> None:
         cleanup_config(config, version)
 
         # add destination_path_prefix
+        find_links_in_mdx_files(destination_path_prefix, f"/{destination_path_prefix}")
     elif version not in config["versions"]:
         if is_biggest_version(version, copy.deepcopy(config["versions"])):
             destination_path_prefix = "latest"
@@ -339,10 +342,17 @@ def process_docs_update(version: str) -> None:
                 copy_directory("latest", f"v/{latest_version}")
                 copy_config(config, latest_version)
                 # replace "latest" with v/{latest_version}
+                find_links_in_mdx_files("latest", "/latest", f"/v/{latest_version}")
             # add destination_path_prefix
+            find_links_in_mdx_files(
+                destination_path_prefix, f"/{destination_path_prefix}"
+            )
         else:
             destination_path_prefix = f"v/{version}"
             # add destination_path_prefix
+            find_links_in_mdx_files(
+                destination_path_prefix, f"/{destination_path_prefix}"
+            )
 
         config["versions"].insert(0, version)
 
