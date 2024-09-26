@@ -1,6 +1,6 @@
 import os
 import re
-
+import argparse
 
 link_pattern = re.compile(
     r"\[(.*?)\]\((.*?)\)|<a\s+(?:[^>]*?\s+)?href=\"(.*?)\"(?:\s+[^>]*?)?>",
@@ -59,6 +59,9 @@ def find_links_in_mdx_files(root_dir, prefix=None):
 
 
 if __name__ == "__main__":
-    root_directory = "/home/htahir1/workspace/zenml_io/zenml-docs/v/0.61.0"  # Specify your root directory
-    link_prefix = "/v/0.61.0/"  # Specify your link prefix, if any
-    find_links_in_mdx_files(root_directory, link_prefix)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--root_directory", type=str, required=True)
+    parser.add_argument("--link_prefix", type=str, required=True)
+    args = parser.parse_args()
+
+    find_links_in_mdx_files(args.root_directory, args.link_prefix)
