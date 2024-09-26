@@ -38,64 +38,38 @@ def replace_links_with_prefix(content, prefix):
     """Replace all markdown, HTML, and General tag links with a given prefix."""
 
     def replace_link(match):
-        md_link_text = match.group(1)
-        md_link_url = match.group(2)
-        html_link_url = match.group(3)
-        tag_name = match.group(4)
-        tag_href_url = match.group(5)
+        md_link_text, md_link_url, html_link_url, tag_name, tag_href_url = (
+            match.groups()
+        )
 
-        if md_link_url:  # Markdown links
-            if (
-                "://" not in md_link_url
-                and not md_link_url.startswith(prefix)
-                and not md_link_url.startswith("/_assets")
-                and not md_link_url.startswith("_assets")
-                and not md_link_url.startswith("mailto:")
-                and not md_link_url.startswith("#")
-            ):
-                if md_link_url[0] == "/":
-                    md_link_url = f"{prefix}{md_link_url}"
-                else:
-                    md_link_url = f"{prefix}/{md_link_url}"
-            return f"[{md_link_text}]({md_link_url})"
-        elif html_link_url:  # HTML <a> links
-            if (
-                "://" not in html_link_url
-                and not html_link_url.startswith(prefix)
-                and not html_link_url.startswith("/_assets")
-                and not html_link_url.startswith("_assets")
-                and not html_link_url.startswith("mailto:")
-                and not html_link_url.startswith("#")
-            ):
-                if html_link_url[0] == "/":
-                    html_link_url = f"{prefix}{html_link_url}"
-                else:
-                    html_link_url = f"{prefix}/{html_link_url}"
-            return match.group(0).replace(match.group(3), html_link_url)
-        elif tag_name and tag_href_url:  # General tags with href
-            if (
-                "://" not in tag_href_url
-                and not tag_href_url.startswith(prefix)
-                and not tag_href_url.startswith("/_assets")
-                and not tag_href_url.startswith("_assets")
-                and not tag_href_url.startswith("mailto:")
-                and not tag_href_url.startswith("#")
-            ):
-                if tag_href_url[0] == "/":
-                    tag_href_url = f"{prefix}{tag_href_url}"
-                else:
-                    tag_href_url = f"{prefix}/{tag_href_url}"
-            # replace the href in the tag
-            return re.sub(
-                r'(href=["\'])' + re.escape(match.group(5)) + r'(["\'])',
-                r"\1" + tag_href_url + r"\2",
-                match.group(0),
-            )
-        else:
-            # if no match, return the original content
-            return match.group(0)
+        url = md_link_url or html_link_url or tag_href_url
+        if url and needs_prefix(url, prefix):
+            new_url = add_prefix(url, prefix)
+
+            if md_link_url:
+                return f"[{md_link_text}]({new_url})"
+            elif html_link_url:
+                return match.group(0).replace(html_link_url, new_url)
+            elif tag_name:
+                return re.sub(
+                    r'(href=["\'])' + re.escape(tag_href_url) + r'(["\'])',
+                    r"\1" + new_url + r"\2",
+                    match.group(0),
+                )
+
+        return match.group(0)
 
     return link_pattern.sub(replace_link, content)
+
+
+def needs_prefix(url, prefix):
+    return "://" not in url and not url.startswith(
+        (prefix, "/_assets", "_assets", "mailto:", "#")
+    )
+
+
+def add_prefix(url, prefix):
+    return f"{prefix}{url}" if url.startswith("/") else f"{prefix}/{url}"
 
 
 def find_links_in_mdx_files(root_dir, prefix=None):
