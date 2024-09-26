@@ -81,23 +81,10 @@ def find_links_in_mdx_files(root_dir, prefix=None):
                 try:
                     with open(filepath, "r", encoding="utf-8") as f:
                         content = f.read()
-                        links = extract_links(content)
-                        if prefix:
-                            content = replace_links_with_prefix(content, prefix)
-                            with open(filepath, "w", encoding="utf-8") as f:
-                                f.write(content)
-                        else:
-                            for link_type, link_text, link_url in links:
-                                if link_type == "markdown":
-                                    print(
-                                        f"File: {filepath}\nMarkdown Link: {link_url}\n"
-                                    )
-                                elif link_type == "html":
-                                    print(f"File: {filepath}\nHTML Link: {link_url}\n")
-                                else:
-                                    print(
-                                        f"File: {filepath}\n{link_type} Link: {link_url}\n"
-                                    )
+                        content = replace_links_with_prefix(content, prefix)
+                        with open(filepath, "w", encoding="utf-8") as f:
+                            f.write(content)
+
                 except Exception as e:
                     print(f"Error reading file {filepath}: {e}")
 
