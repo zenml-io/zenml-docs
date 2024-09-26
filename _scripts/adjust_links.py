@@ -78,7 +78,6 @@ def replace_or_add_prefix(url, new_prefix, old_prefix):
 
 def find_links_in_mdx_files(root_dir, new_prefix, old_prefix=None):
     """Finds markdown, HTML, and general tag links with href in all .mdx files within a directory recursively."""
-    breakpoint()
     for dirpath, _, filenames in os.walk(root_dir):
         for filename in filenames:
             if filename.endswith(".mdx"):
