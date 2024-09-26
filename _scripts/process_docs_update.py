@@ -297,6 +297,7 @@ def process_docs_update(version: str) -> None:
 
     source_mint_json = os.path.join("temp_docs", "mint.json")
     dest_mint_json = "mint.json"
+    link_root_old_prefix = None
 
     with open(source_mint_json, "r") as f:
         source_config = json.load(f)
@@ -320,7 +321,8 @@ def process_docs_update(version: str) -> None:
             config["versions"].insert(0, version)
 
         # add destination_path_prefix
-        find_links_in_mdx_files(destination_path_prefix, f"/{destination_path_prefix}")
+        link_root_dir = destination_path_prefix
+        link_root_prefix = f"/{destination_path_prefix}"
     elif version in config["versions"]:
         print(f"Processing old version: {version}")
         if is_latest_version(version, config["versions"]):
@@ -332,7 +334,8 @@ def process_docs_update(version: str) -> None:
         cleanup_config(config, version)
 
         # add destination_path_prefix
-        find_links_in_mdx_files(destination_path_prefix, f"/{destination_path_prefix}")
+        link_root_dir = destination_path_prefix
+        link_root_prefix = f"/{destination_path_prefix}"
     elif version not in config["versions"]:
         if is_biggest_version(version, copy.deepcopy(config["versions"])):
             destination_path_prefix = "latest"
@@ -342,17 +345,17 @@ def process_docs_update(version: str) -> None:
                 copy_directory("latest", f"v/{latest_version}")
                 copy_config(config, latest_version)
                 # replace "latest" with v/{latest_version}
-                find_links_in_mdx_files("latest", "/latest", f"/v/{latest_version}")
+                link_root_dir = "latest"
+                link_root_prefix = "/latest"
+                link_root_old_prefix = f"/v/{latest_version}"
             # add destination_path_prefix
-            find_links_in_mdx_files(
-                destination_path_prefix, f"/{destination_path_prefix}"
-            )
+            link_root_dir = destination_path_prefix
+            link_root_prefix = f"/{destination_path_prefix}"
         else:
             destination_path_prefix = f"v/{version}"
             # add destination_path_prefix
-            find_links_in_mdx_files(
-                destination_path_prefix, f"/{destination_path_prefix}"
-            )
+            link_root_dir = destination_path_prefix
+            link_root_prefix = f"/{destination_path_prefix}"
 
         config["versions"].insert(0, version)
 
@@ -377,6 +380,9 @@ def process_docs_update(version: str) -> None:
 
     with open(dest_mint_json, "w") as f:
         json.dump(config, f, indent=2)
+
+    # Fix the links
+    find_links_in_mdx_files(link_root_dir, link_root_prefix, link_root_old_prefix)
 
     shutil.rmtree("temp_docs")
 

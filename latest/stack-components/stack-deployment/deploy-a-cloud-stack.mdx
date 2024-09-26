@@ -4,19 +4,19 @@ description: "Deploy a cloud stack from scratch with a single click"
 icon: clipboard-list
 ---
 
-In ZenML, the [stack](latest/user-guide/guides/production-guide/understand-stacks) is a fundamental concept that represents the configuration of your infrastructure. In a normal workflow, creating a stack requires you to first deploy the necessary pieces of infrastructure and then define them as stack components in ZenML with proper authentication.
+In ZenML, the [stack](/user-guide/guides/production-guide/understand-stacks) is a fundamental concept that represents the configuration of your infrastructure. In a normal workflow, creating a stack requires you to first deploy the necessary pieces of infrastructure and then define them as stack components in ZenML with proper authentication.
 
 Especially in a remote setting, this process can be challenging and time-consuming, and it may create multi-faceted problems. This is why we implemented a feature, that allows you to **deploy the necessary pieces of infrastructure on your selected cloud provider and get you started on remote stack with a single click**.
 
 <Info>
-If you prefer to have more control over where and how resources are provisioned in your cloud, you can [use one of our Terraform modules](latest/stack-components/stack-deployment/deploy-a-cloud-stack-with-terraform) to manage your infrastructure as code yourself.
+If you prefer to have more control over where and how resources are provisioned in your cloud, you can [use one of our Terraform modules](/stack-components/stack-deployment/deploy-a-cloud-stack-with-terraform) to manage your infrastructure as code yourself.
 
-If you have the required infrastructure pieces already deployed on your cloud, you can also use [the stack wizard to seamlessly register your stack](latest/stack-components/stack-deployment/register-a-cloud-stack).
+If you have the required infrastructure pieces already deployed on your cloud, you can also use [the stack wizard to seamlessly register your stack](/stack-components/stack-deployment/register-a-cloud-stack).
 
 </Info>
 ## How to use the 1-click deployment tool?
 
-The first thing that you need in order to use this feature is a deployed instance of ZenML (not a local server via `zenml up`). If you do not already have it set up for you, feel free to learn how to do so [here](latest/getting-started/deploying-zenml).
+The first thing that you need in order to use this feature is a deployed instance of ZenML (not a local server via `zenml up`). If you do not already have it set up for you, feel free to learn how to do so [here](/getting-started/deploying-zenml).
 
 Once you are connected to your deployed ZenML instance, you can use the 1-click deployment tool either through the dashboard or the CLI:
 <Tabs>
