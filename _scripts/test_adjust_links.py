@@ -1,4 +1,4 @@
-from adjust_links import extract_links
+from adjust_links import extract_links, replace_links_with_prefix
 import pytest
 
 
@@ -28,8 +28,8 @@ def test_html_links():
 
 def test_card_links():
     content = """
-    <Card title="Example Card" icon="info" href="https://example.com" horizontal />
-    Another card link <Card title="Another Card" icon="star" href="https://example.org" horizontal />.
+    <Card title="Example Card" icon="info" href="https://example.com" horizontal/>
+    Another card link <Card title="Another Card" icon="star" href="https://example.org" horizontal/>.
     """
     expected = [
         ("Card", None, "https://example.com"),
@@ -54,7 +54,7 @@ def test_mixed_links():
     content = """
     Here is a [markdown link](https://example.com).
     And here is an <a href="https://example.org">HTML link</a>.
-    And here is a <Card title="Example Card" icon="info" href="https://example.net" horizontal />.
+    And here is a <Card title="Example Card" icon="info" href="https://example.net" horizontal/>.
     And here is a <CustomTag title="Custom Tag" href="https://example.org" />.
     """
     expected = [
@@ -130,6 +130,75 @@ def test_general_invalid_tags():
     """
     expected = []
     assert extract_links(content) == expected
+
+
+def test_replace_markdown_links():
+    content = """
+    Here is a [link](/example).
+    Another [example](/example-org).
+    """
+    prefix = "/prefix"
+    expected_content = """
+    Here is a [link](/prefix/example).
+    Another [example](/prefix/example-org).
+    """
+    assert replace_links_with_prefix(content, prefix) == expected_content
+
+
+def test_replace_html_links():
+    content = """
+    Here is an <a href="/example">HTML link</a>.
+    Another <a href="/example-org" class="some-class">example</a>.
+    """
+    prefix = "/prefix"
+    expected_content = """
+    Here is an <a href="/prefix/example">HTML link</a>.
+    Another <a href="/prefix/example-org" class="some-class">example</a>.
+    """
+    assert replace_links_with_prefix(content, prefix) == expected_content
+
+
+def test_replace_card_links():
+    content = """
+    <Card title="Example Card" icon="info" href="/example" horizontal/>
+    Another card link <Card title="Another Card" icon="star" href="/example-org" horizontal/>.
+    """
+    prefix = "/prefix"
+    expected_content = """
+    <Card title="Example Card" icon="info" href="/prefix/example" horizontal/>
+    Another card link <Card title="Another Card" icon="star" href="/prefix/example-org" horizontal/>.
+    """
+    assert replace_links_with_prefix(content, prefix) == expected_content
+
+
+def test_replace_custom_tag_links():
+    content = """
+    <CustomTag title="Custom Tag" href="/example" />
+    Another custom tag <AnotherTag href="/example-org" class="custom-class" />.
+    """
+    prefix = "/prefix"
+    expected_content = """
+    <CustomTag title="Custom Tag" href="/prefix/example" />
+    Another custom tag <AnotherTag href="/prefix/example-org" class="custom-class" />.
+    """
+    assert replace_links_with_prefix(content, prefix) == expected_content
+
+
+def test_replace_mixed_links():
+    content = """
+    Here is a [markdown link](/example).
+    And here is an <a href="/example-org">HTML link</a>.
+    And here is a <Card title="Example Card" icon="info" href="/example-net" horizontal/>.
+    And here is a <CustomTag title="Custom Tag" href="/example-org" />.
+    """
+    prefix = "/prefix"
+    expected_content = """
+    Here is a [markdown link](/prefix/example).
+    And here is an <a href="/prefix/example-org">HTML link</a>.
+    And here is a <Card title="Example Card" icon="info" href="/prefix/example-net" horizontal/>.
+    And here is a <CustomTag title="Custom Tag" href="/prefix/example-org" />.
+    """
+    assert replace_links_with_prefix(content, prefix) == expected_content
 
 
 # This allows the tests to be run if the script is executed directly.

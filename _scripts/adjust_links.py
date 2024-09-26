@@ -4,9 +4,9 @@ import argparse
 
 link_pattern = re.compile(
     r"""
-    \[(.*?)\]\((.*?)\)                   # Markdown links
-    |<a\s+(?:[^>]*?\s+)?href=\"(.*?)\".*?>  # HTML links
-    |<([a-zA-Z0-9]+)[^>]*?\s+href=\"(.*?)\"[^>]*?\/?> # General tag with href
+    \[(.*?)\]\((.*?)\)                             # Markdown links
+    |<a\s+(?:[^>]*?\s+)?href=["'](.*?)["'].*?>     # HTML links
+    |<([a-zA-Z0-9]+)[^>]*?\s+href=["'](.*?)["'][^>]*?> # General tag with href
     """,
     re.MULTILINE | re.DOTALL | re.VERBOSE,
 )
@@ -34,6 +34,38 @@ def extract_links(content):
     return links
 
 
+def replace_links_with_prefix(content, prefix):
+    """Replace all markdown, HTML, and General tag links with a given prefix."""
+
+    def replace_link(match):
+        md_link_text = match.group(1)
+        md_link_url = match.group(2)
+        html_link_url = match.group(3)
+        tag_name = match.group(4)
+        tag_href_url = match.group(5)
+
+        if md_link_url:  # Markdown links
+            if "://" not in md_link_url and not md_link_url.startswith(prefix):
+                md_link_url = f"{prefix}{md_link_url}"
+            return f"[{md_link_text}]({md_link_url})"
+        elif html_link_url:  # HTML <a> links
+            if "://" not in html_link_url and not html_link_url.startswith(prefix):
+                html_link_url = f"{prefix}{html_link_url}"
+            return match.group(0).replace(match.group(3), html_link_url)
+        elif tag_name and tag_href_url:  # General tags with href
+            if "://" not in tag_href_url and not tag_href_url.startswith(prefix):
+                tag_href_url = f"{prefix}{tag_href_url}"
+            return re.sub(
+                r'(href=["\'])' + re.escape(match.group(5)) + r'(["\'])',
+                r"\1" + tag_href_url + r"\2",
+                match.group(0),
+            )
+        else:
+            return match.group(0)
+
+    return link_pattern.sub(replace_link, content)
+
+
 def find_links_in_mdx_files(root_dir, prefix=None):
     """Finds markdown, HTML, and general tag links with href in all .mdx files within a directory recursively."""
     for dirpath, _, filenames in os.walk(root_dir):
@@ -45,35 +77,7 @@ def find_links_in_mdx_files(root_dir, prefix=None):
                         content = f.read()
                         links = extract_links(content)
                         if prefix:
-                            for link_type, link_text, link_url in links:
-                                if (
-                                    (
-                                        link_type == "markdown"
-                                        or link_type == "html"
-                                        or link_type
-                                    )
-                                    and "://" not in link_url  # ignore external links
-                                    and not link_url.startswith(
-                                        prefix
-                                    )  # ignore links that already have the prefix
-                                ):
-                                    new_link = f"{prefix}{link_url}"
-                                    if link_type == "markdown":
-                                        content = content.replace(
-                                            f"({link_url})", f"({new_link})"
-                                        )
-                                    elif link_type == "html":
-                                        content = re.sub(
-                                            r'(href="{})'.format(re.escape(link_url)),
-                                            f'href="{new_link}"',
-                                            content,
-                                        )
-                                    else:
-                                        content = re.sub(
-                                            r'(href="{})'.format(re.escape(link_url)),
-                                            f'href="{new_link}"',
-                                            content,
-                                        )
+                            content = replace_links_with_prefix(content, prefix)
                             with open(filepath, "w", encoding="utf-8") as f:
                                 f.write(content)
                         else:
