@@ -34,7 +34,7 @@ def extract_links(content):
     return links
 
 
-def replace_links_with_prefix(content, prefix):
+def replace_links_with_prefix(content, new_prefix, old_prefix=None):
     """Replace all markdown, HTML, and General tag links with a given prefix."""
 
     def replace_link(match):
@@ -43,8 +43,8 @@ def replace_links_with_prefix(content, prefix):
         )
 
         url = md_link_url or html_link_url or tag_href_url
-        if url and needs_prefix(url, prefix):
-            new_url = add_prefix(url, prefix)
+        if url and needs_prefix_or_replacement(url, new_prefix, old_prefix):
+            new_url = replace_or_add_prefix(url, new_prefix, old_prefix)
 
             if md_link_url:
                 return f"[{md_link_text}]({new_url})"
@@ -62,17 +62,21 @@ def replace_links_with_prefix(content, prefix):
     return link_pattern.sub(replace_link, content)
 
 
-def needs_prefix(url, prefix):
-    return "://" not in url and not url.startswith(
-        (prefix, "/_assets", "_assets", "mailto:", "#")
-    )
+def needs_prefix_or_replacement(url, new_prefix, old_prefix):
+    if "://" in url or url.startswith(("/_assets", "_assets", "mailto:", "#")):
+        return False
+    if old_prefix and url.startswith(old_prefix):
+        return True
+    return not url.startswith(new_prefix)
 
 
-def add_prefix(url, prefix):
-    return f"{prefix}{url}" if url.startswith("/") else f"{prefix}/{url}"
+def replace_or_add_prefix(url, new_prefix, old_prefix):
+    if old_prefix and url.startswith(old_prefix):
+        return new_prefix + url[len(old_prefix) :]
+    return f"{new_prefix}{url}" if url.startswith("/") else f"{new_prefix}/{url}"
 
 
-def find_links_in_mdx_files(root_dir, prefix=None):
+def find_links_in_mdx_files(root_dir, new_prefix, old_prefix=None):
     """Finds markdown, HTML, and general tag links with href in all .mdx files within a directory recursively."""
     for dirpath, _, filenames in os.walk(root_dir):
         for filename in filenames:
@@ -81,7 +85,9 @@ def find_links_in_mdx_files(root_dir, prefix=None):
                 try:
                     with open(filepath, "r", encoding="utf-8") as f:
                         content = f.read()
-                        content = replace_links_with_prefix(content, prefix)
+                        content = replace_links_with_prefix(
+                            content, new_prefix, old_prefix
+                        )
                         with open(filepath, "w", encoding="utf-8") as f:
                             f.write(content)
 
@@ -92,7 +98,8 @@ def find_links_in_mdx_files(root_dir, prefix=None):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--root-directory", type=str, required=True)
-    parser.add_argument("--link-prefix", type=str)
+    parser.add_argument("--new-prefix", type=str, required=True)
+    parser.add_argument("--old-prefix", type=str)
     args = parser.parse_args()
 
-    find_links_in_mdx_files(args.root_directory, args.link_prefix)
+    find_links_in_mdx_files(args.root_directory, args.new_prefix, args.old_prefix)

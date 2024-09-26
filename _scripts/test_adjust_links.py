@@ -331,6 +331,128 @@ def test_extract_links_with_hash_fragment():
     assert extract_links(content) == expected
 
 
+def test_replace_existing_prefix_markdown():
+    content = """
+    [Link](/old-prefix/example)
+    [Another](/old-prefix/example-two)
+    """
+    new_prefix = "/new-prefix"
+    old_prefix = "/old-prefix"
+    expected_content = """
+    [Link](/new-prefix/example)
+    [Another](/new-prefix/example-two)
+    """
+    assert (
+        replace_links_with_prefix(content, new_prefix, old_prefix) == expected_content
+    )
+
+
+def test_replace_existing_prefix_html():
+    content = """
+    <a href="/old-prefix/example">Link</a>
+    <a href="/old-prefix/example-two">Another</a>
+    """
+    new_prefix = "/new-prefix"
+    old_prefix = "/old-prefix"
+    expected_content = """
+    <a href="/new-prefix/example">Link</a>
+    <a href="/new-prefix/example-two">Another</a>
+    """
+    assert (
+        replace_links_with_prefix(content, new_prefix, old_prefix) == expected_content
+    )
+
+
+def test_replace_existing_prefix_custom_tag():
+    content = """
+    <Card href="/old-prefix/example" />
+    <CustomTag href="/old-prefix/example-two" />
+    """
+    new_prefix = "/new-prefix"
+    old_prefix = "/old-prefix"
+    expected_content = """
+    <Card href="/new-prefix/example" />
+    <CustomTag href="/new-prefix/example-two" />
+    """
+    assert (
+        replace_links_with_prefix(content, new_prefix, old_prefix) == expected_content
+    )
+
+
+def test_mixed_prefixes():
+    content = """
+    [Link 1](/old-prefix/example)
+    [Link 2](/example)
+    <a href="/old-prefix/example-two">Link 3</a>
+    <a href="/another-example">Link 4</a>
+    <Card href="/old-prefix/example-three" />
+    <CustomTag href="/yet-another-example" />
+    """
+    new_prefix = "/new-prefix"
+    old_prefix = "/old-prefix"
+    expected_content = """
+    [Link 1](/new-prefix/example)
+    [Link 2](/new-prefix/example)
+    <a href="/new-prefix/example-two">Link 3</a>
+    <a href="/new-prefix/another-example">Link 4</a>
+    <Card href="/new-prefix/example-three" />
+    <CustomTag href="/new-prefix/yet-another-example" />
+    """
+    assert (
+        replace_links_with_prefix(content, new_prefix, old_prefix) == expected_content
+    )
+
+
+def test_no_change_needed():
+    content = """
+    [External](https://example.com)
+    <a href="mailto:test@example.com">Email</a>
+    <Card href="#section" />
+    """
+    new_prefix = "/new-prefix"
+    old_prefix = "/old-prefix"
+    assert replace_links_with_prefix(content, new_prefix, old_prefix) == content
+
+
+def test_replace_prefix_with_query_params():
+    content = "[Link](/old-prefix/example?param=value)"
+    new_prefix = "/new-prefix"
+    old_prefix = "/old-prefix"
+    expected = "[Link](/new-prefix/example?param=value)"
+    assert replace_links_with_prefix(content, new_prefix, old_prefix) == expected
+
+
+def test_replace_prefix_with_hash_fragment():
+    content = "[Link](/old-prefix/example#section)"
+    new_prefix = "/new-prefix"
+    old_prefix = "/old-prefix"
+    expected = "[Link](/new-prefix/example#section)"
+    assert replace_links_with_prefix(content, new_prefix, old_prefix) == expected
+
+
+def test_replace_prefix_with_encoded_characters():
+    content = "[Link](/old-prefix/example%20with%20spaces)"
+    new_prefix = "/new-prefix"
+    old_prefix = "/old-prefix"
+    expected = "[Link](/new-prefix/example%20with%20spaces)"
+    assert replace_links_with_prefix(content, new_prefix, old_prefix) == expected
+
+
+def test_no_old_prefix_provided():
+    content = """
+    [Link 1](/example)
+    <a href="/another-example">Link 2</a>
+    <Card href="/yet-another-example" />
+    """
+    new_prefix = "/new-prefix"
+    expected_content = """
+    [Link 1](/new-prefix/example)
+    <a href="/new-prefix/another-example">Link 2</a>
+    <Card href="/new-prefix/yet-another-example" />
+    """
+    assert replace_links_with_prefix(content, new_prefix) == expected_content
+
+
 # This allows the tests to be run if the script is executed directly.
 if __name__ == "__main__":
     pytest.main()
