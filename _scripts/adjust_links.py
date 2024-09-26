@@ -60,8 +60,8 @@ def find_links_in_mdx_files(root_dir, prefix=None):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--root_directory", type=str, required=True)
-    parser.add_argument("--link_prefix", type=str, required=True)
+    parser.add_argument("--root-directory", type=str, required=True)
+    parser.add_argument("--link-prefix", type=str, required=True)
     args = parser.parse_args()
 
     find_links_in_mdx_files(args.root_directory, args.link_prefix)
