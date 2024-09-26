@@ -211,6 +211,126 @@ def test_replace_mixed_links():
     assert replace_links_with_prefix(content, prefix) == expected_content
 
 
+def test_empty_href():
+    content = """
+    <Card title="Empty Link" href="" />
+    <a href="">Empty HTML Link</a>
+    [Empty Markdown Link]()
+    """
+    expected = []
+    assert extract_links(content) == expected
+
+
+def test_whitespace_in_href():
+    content = """
+    <Card title="Whitespace Link" href=" https://example.com " />
+    <a href=" https://example.com ">Whitespace HTML Link</a>
+    [Whitespace Markdown Link]( https://example.com )
+    """
+    expected = [
+        ("Card", None, " https://example.com "),
+        ("html", None, " https://example.com "),
+        ("markdown", "Whitespace Markdown Link", " https://example.com "),
+    ]
+    assert extract_links(content) == expected
+
+
+def test_relative_and_absolute_links():
+    content = """
+    [Relative Link](/relative/path)
+    <a href="https://example.com/absolute/path">Absolute Link</a>
+    """
+    expected = [
+        ("markdown", "Relative Link", "/relative/path"),
+        ("html", None, "https://example.com/absolute/path"),
+    ]
+    assert extract_links(content) == expected
+
+
+def test_links_inside_code_blocks():
+    content = """
+    ```python
+    print("[This is not a link](definitely-not-a-url)")
+    ```
+    ```mdx
+    <ThisIsNotACard href="not-a-url" />
+    ```
+    [This is a link](/actual-link)
+    """
+    expected = [
+        ("markdown", "This is not a link", "definitely-not-a-url"),
+        ("ThisIsNotACard", None, "not-a-url"),
+        ("markdown", "This is a link", "/actual-link"),
+    ]
+    assert extract_links(content) == expected
+
+
+def test_escaped_characters_markdown():
+    content = """
+    [Link with \[escaped] characters](https://example.com/escaped)
+    """
+    expected = [
+        ("markdown", "Link with \[escaped] characters", "https://example.com/escaped")
+    ]
+    assert extract_links(content) == expected
+
+
+def test_html_entities_in_links():
+    content = """
+    <a href="https://example.com?param=a&b=c">Link with HTML entities</a>
+    """
+    expected = [("html", None, "https://example.com?param=a&b=c")]
+    assert extract_links(content) == expected
+
+
+def test_multiline_attributes_in_tags():
+    content = """
+    <Card title="Multiline Attributes" icon="info"
+    href="https://example.com" horizontal/>
+    """
+    expected = [("Card", None, "https://example.com")]
+    assert extract_links(content) == expected
+
+
+def test_replace_links_with_query_params():
+    content = "[Link](/example?param=value)"
+    prefix = "/prefix"
+    expected = "[Link](/prefix/example?param=value)"
+    assert replace_links_with_prefix(content, prefix) == expected
+
+
+def test_replace_links_with_hash_fragment():
+    content = "[Link](/example#section)"
+    prefix = "/prefix"
+    expected = "[Link](/prefix/example#section)"
+    assert replace_links_with_prefix(content, prefix) == expected
+
+
+def test_replace_links_with_encoded_characters():
+    content = "[Link](/example%20with%20spaces)"
+    prefix = "/prefix"
+    expected = "[Link](/prefix/example%20with%20spaces)"
+    assert replace_links_with_prefix(content, prefix) == expected
+
+
+def test_extract_links_with_encoded_characters():
+    content = "[Link](/example%20with%20spaces)"
+    expected = [("markdown", "Link", "/example%20with%20spaces")]
+    assert extract_links(content) == expected
+
+
+def test_extract_links_with_query_params():
+    content = "[Link](/example?param=value)"
+    expected = [("markdown", "Link", "/example?param=value")]
+    assert extract_links(content) == expected
+
+
+def test_extract_links_with_hash_fragment():
+    content = "[Link](/example#section)"
+    expected = [("markdown", "Link", "/example#section")]
+    assert extract_links(content) == expected
+
+
 # This allows the tests to be run if the script is executed directly.
 if __name__ == "__main__":
     pytest.main()

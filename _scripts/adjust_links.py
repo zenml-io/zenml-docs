@@ -62,9 +62,9 @@ def replace_links_with_prefix(content, prefix):
             if (
                 "://" not in html_link_url
                 and not html_link_url.startswith(prefix)
-                and not md_link_url.startswith("/_assets")
-                and not md_link_url.startswith("_assets")
-                and not md_link_url.startswith("mailto:")
+                and not html_link_url.startswith("/_assets")
+                and not html_link_url.startswith("_assets")
+                and not html_link_url.startswith("mailto:")
                 and not html_link_url.startswith("#")
             ):
                 if html_link_url[0] == "/":
@@ -76,8 +76,8 @@ def replace_links_with_prefix(content, prefix):
             if (
                 "://" not in tag_href_url
                 and not tag_href_url.startswith(prefix)
-                and not md_link_url.startswith("/_assets")
-                and not md_link_url.startswith("_assets")
+                and not tag_href_url.startswith("/_assets")
+                and not tag_href_url.startswith("_assets")
                 and not tag_href_url.startswith("mailto:")
                 and not tag_href_url.startswith("#")
             ):

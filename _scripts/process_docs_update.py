@@ -317,6 +317,8 @@ def process_docs_update(version: str) -> None:
             cleanup_config(config, version)
         else:
             config["versions"].insert(0, version)
+
+        # add destination_path_prefix
     elif version in config["versions"]:
         print(f"Processing old version: {version}")
         if is_latest_version(version, config["versions"]):
@@ -326,6 +328,8 @@ def process_docs_update(version: str) -> None:
 
         cleanup_directory(destination_path_prefix)
         cleanup_config(config, version)
+
+        # add destination_path_prefix
     elif version not in config["versions"]:
         if is_biggest_version(version, copy.deepcopy(config["versions"])):
             destination_path_prefix = "latest"
@@ -334,8 +338,11 @@ def process_docs_update(version: str) -> None:
             if latest_version:
                 copy_directory("latest", f"v/{latest_version}")
                 copy_config(config, latest_version)
+                # replace "latest" with v/{latest_version}
+            # add destination_path_prefix
         else:
             destination_path_prefix = f"v/{version}"
+            # add destination_path_prefix
 
         config["versions"].insert(0, version)
 
