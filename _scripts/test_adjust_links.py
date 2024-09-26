@@ -136,10 +136,12 @@ def test_replace_markdown_links():
     content = """
     Here is a [link](/example).
     Another [example](/example-org).
+    Another [example](example-org).
     """
     prefix = "/prefix"
     expected_content = """
     Here is a [link](/prefix/example).
+    Another [example](/prefix/example-org).
     Another [example](/prefix/example-org).
     """
     assert replace_links_with_prefix(content, prefix) == expected_content
@@ -149,10 +151,12 @@ def test_replace_html_links():
     content = """
     Here is an <a href="/example">HTML link</a>.
     Another <a href="/example-org" class="some-class">example</a>.
+    Another <a href="example-org" class="some-class">example</a>.
     """
     prefix = "/prefix"
     expected_content = """
     Here is an <a href="/prefix/example">HTML link</a>.
+    Another <a href="/prefix/example-org" class="some-class">example</a>.
     Another <a href="/prefix/example-org" class="some-class">example</a>.
     """
     assert replace_links_with_prefix(content, prefix) == expected_content
@@ -162,10 +166,12 @@ def test_replace_card_links():
     content = """
     <Card title="Example Card" icon="info" href="/example" horizontal/>
     Another card link <Card title="Another Card" icon="star" href="/example-org" horizontal/>.
+    Another card link <Card title="Another Card" icon="star" href="example-org" horizontal/>.
     """
     prefix = "/prefix"
     expected_content = """
     <Card title="Example Card" icon="info" href="/prefix/example" horizontal/>
+    Another card link <Card title="Another Card" icon="star" href="/prefix/example-org" horizontal/>.
     Another card link <Card title="Another Card" icon="star" href="/prefix/example-org" horizontal/>.
     """
     assert replace_links_with_prefix(content, prefix) == expected_content
@@ -175,10 +181,12 @@ def test_replace_custom_tag_links():
     content = """
     <CustomTag title="Custom Tag" href="/example" />
     Another custom tag <AnotherTag href="/example-org" class="custom-class" />.
+    Another custom tag <AnotherTag href="example-org" class="custom-class" />.
     """
     prefix = "/prefix"
     expected_content = """
     <CustomTag title="Custom Tag" href="/prefix/example" />
+    Another custom tag <AnotherTag href="/prefix/example-org" class="custom-class" />.
     Another custom tag <AnotherTag href="/prefix/example-org" class="custom-class" />.
     """
     assert replace_links_with_prefix(content, prefix) == expected_content
@@ -190,6 +198,7 @@ def test_replace_mixed_links():
     And here is an <a href="/example-org">HTML link</a>.
     And here is a <Card title="Example Card" icon="info" href="/example-net" horizontal/>.
     And here is a <CustomTag title="Custom Tag" href="/example-org" />.
+    And here is a [example](example-org).
     """
     prefix = "/prefix"
     expected_content = """
@@ -197,6 +206,7 @@ def test_replace_mixed_links():
     And here is an <a href="/prefix/example-org">HTML link</a>.
     And here is a <Card title="Example Card" icon="info" href="/prefix/example-net" horizontal/>.
     And here is a <CustomTag title="Custom Tag" href="/prefix/example-org" />.
+    And here is a [example](/prefix/example-org).
     """
     assert replace_links_with_prefix(content, prefix) == expected_content
 

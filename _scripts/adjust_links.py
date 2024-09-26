@@ -45,22 +45,48 @@ def replace_links_with_prefix(content, prefix):
         tag_href_url = match.group(5)
 
         if md_link_url:  # Markdown links
-            if "://" not in md_link_url and not md_link_url.startswith(prefix):
-                md_link_url = f"{prefix}{md_link_url}"
+            if (
+                "://" not in md_link_url
+                and not md_link_url.startswith(prefix)
+                and not md_link_url.startswith("_assets")
+                and not md_link_url.startswith("#")
+            ):
+                if md_link_url[0] == "/":
+                    md_link_url = f"{prefix}{md_link_url}"
+                else:
+                    md_link_url = f"{prefix}/{md_link_url}"
             return f"[{md_link_text}]({md_link_url})"
         elif html_link_url:  # HTML <a> links
-            if "://" not in html_link_url and not html_link_url.startswith(prefix):
-                html_link_url = f"{prefix}{html_link_url}"
+            if (
+                "://" not in html_link_url
+                and not html_link_url.startswith(prefix)
+                and not html_link_url.startswith("_assets")
+                and not html_link_url.startswith("#")
+            ):
+                if html_link_url[0] == "/":
+                    html_link_url = f"{prefix}{html_link_url}"
+                else:
+                    html_link_url = f"{prefix}/{html_link_url}"
             return match.group(0).replace(match.group(3), html_link_url)
         elif tag_name and tag_href_url:  # General tags with href
-            if "://" not in tag_href_url and not tag_href_url.startswith(prefix):
-                tag_href_url = f"{prefix}{tag_href_url}"
+            if (
+                "://" not in tag_href_url
+                and not tag_href_url.startswith(prefix)
+                and not tag_href_url.startswith("_assets")
+                and not tag_href_url.startswith("#")
+            ):
+                if tag_href_url[0] == "/":
+                    tag_href_url = f"{prefix}{tag_href_url}"
+                else:
+                    tag_href_url = f"{prefix}/{tag_href_url}"
+            # replace the href in the tag
             return re.sub(
                 r'(href=["\'])' + re.escape(match.group(5)) + r'(["\'])',
                 r"\1" + tag_href_url + r"\2",
                 match.group(0),
             )
         else:
+            # if no match, return the original content
             return match.group(0)
 
     return link_pattern.sub(replace_link, content)
