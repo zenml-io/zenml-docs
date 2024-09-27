@@ -8,7 +8,7 @@ Until now, we have been executing ZenML pipelines locally. While this is a good 
 
 This allows data scientists to experiment with data processing and model training locally and then have code changes automatically tested and validated through the standard pull request/merge request peer review process. Changes that pass the CI and code review are then deployed automatically to production. Here is how this could look like:
 <Frame caption="Pipeline being run on staging/production stack through ci/cd">
-  <img src="/_assets/user-guide/production-guide/ci-cid.avif" />
+  <img src="/images/user-guide/production-guide/ci-cid.avif" />
 </Frame>
 
 ## Breaking it down
@@ -21,7 +21,7 @@ To illustrate this, let's walk through how this process could be set up with a G
 </Info>
 ### Configure an API Key in ZenML
 
-In order to facilitate machine-to-machine connection you need to create an API key within ZenML. Learn more about those [here](https://docs.zenml.io/usage/resource-data-management/connecting-to-zenml/connect-with-a-service-account).
+In order to facilitate machine-to-machine connection you need to create an API key within ZenML. Learn more about those [here](https://docs.zenml.io/versions/0.66.0/how-to/connecting-to-zenml/connect-with-a-service-account).
 
 ```Bash
 zenml service-account create github_action_api_key
@@ -43,7 +43,7 @@ To configure a ZenML client to use this API key, run:
 
 For our Github Actions we will need to set up some secrets [for our repository](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository). Specifically, you should use github secrets to store the `ZENML_API_KEY` that you created above.
 <Frame caption="create_gh_secret.png">
-  <img src="/_assets/user-guide/production-guide/ci-cid-1.avif" />
+  <img src="/images/user-guide/production-guide/ci-cid-1.avif" />
 </Frame>
 
 The other values that are loaded from secrets into the environment [here](https://github.com/zenml-io/zenml-gitflow/blob/main/.github/workflows/pipeline%5Frun.yaml#L14-L23) can also be set explicitly or as variables.
@@ -52,7 +52,7 @@ The other values that are loaded from secrets into the environment [here](https:
 
 You might not necessarily want to use the same stack with the same resources for your staging and production use.
 
-This step is optional, all you'll need for certain is a stack that runs remotely (remote orchestration and artifact storage). The rest is up to you. You might for example want to parametrize your pipeline to use different data sources for the respective environments. You can also use different [configuration files](https://github.com/zenml-io/zenml/blob/release/0.66.0/docs/book/versions/0.66.0/how-to/configuring-zenml/configuring-zenml.md) for the different environments to configure the [Model](/latest/usage/development-monitoring/use-the-model-control-plane), the [DockerSettings](/latest/usage/project-setup/customize-docker-builds/docker-settings-on-a-pipeline), the [ResourceSettings like accelerators](/latest/usage/resource-data-management/training-with-gpus) differently for the different environments.
+This step is optional, all you'll need for certain is a stack that runs remotely (remote orchestration and artifact storage). The rest is up to you. You might for example want to parametrize your pipeline to use different data sources for the respective environments. You can also use different [configuration files](https://github.com/zenml-io/zenml/blob/release/0.66.0/docs/book/versions/0.66.0/how-to/configuring-zenml/configuring-zenml.md) for the different environments to configure the [Model](/v/0.67.0/versions/0.66.0/how-to/use-the-model-control-plane), the [DockerSettings](/v/0.67.0/versions/0.66.0/how-to/customize-docker-builds/docker-settings-on-a-pipeline), the [ResourceSettings like accelerators](/v/0.67.0/versions/0.66.0/how-to/training-with-gpus) differently for the different environments.
 
 ### Trigger a pipeline on a Pull Request (Merge Request)
 
@@ -119,7 +119,7 @@ When you push to a branch now, that is within a Pull Request, this action will r
 
 Finally you can configure your github action workflow to leave a report based on the pipeline that was run. Check out the template for this \[here\](https://github.com/zenml-io/zenml-gitflow/blob/main/.github/workflows/pipeline\_run.yaml#L87-L99.
 <Frame caption="Comment left on Pull Request">
-  <img src="/_assets/user-guide/production-guide/ci-cid-2.avif" />
+  <img src="/images/user-guide/production-guide/ci-cid-2.avif" />
 </Frame>
 
 

@@ -34,7 +34,7 @@ You will need to do the following to start using the Databricks orchestrator:
 ## How it works
 
 <Frame caption="Databricks How It works Diagram">
-  <img src="/_assets/stack-components/stack-components-9.avif"/>
+  <img src="/images/stack-components/stack-components-9.avif"/>
 </Frame>
 
 The Databricks orchestrator in ZenML leverages the concept of Wheel Packages. When you run a pipeline with the Databricks orchestrator, ZenML creates a Python wheel package from your project. This wheel package contains all the necessary code and dependencies for your pipeline.
@@ -71,7 +71,7 @@ We recommend creating a Databricks service account with the necessary permission
 
 
 <Frame>
-  <img src="/_assets/stack-components/stack-components-9.avif"/>
+  <img src="/images/stack-components/stack-components-9.avif"/>
 </Frame>
 
 ```bash
@@ -90,7 +90,7 @@ python run.py
 Databricks comes with its own UI that you can use to find further details about your pipeline runs, such as the logs of your steps.
 
 <Frame caption="Databricks UI">
-  <img src="/_assets/stack-components/stack-components-10.avif"/>
+  <img src="/images/stack-components/stack-components-10.avif"/>
 </Frame>
 
 For any runs executed on Databricks, you can get the URL to the Databricks UI in Python using the following code snippet:
@@ -103,7 +103,7 @@ orchestrator_url = pipeline_run.run_metadata["orchestrator_url"].value
 ```
 
 <Frame caption="Databricks Run UI">
-  <img src="/_assets/stack-components/stack-components-11.avif"/>
+  <img src="/images/stack-components/stack-components-11.avif"/>
 </Frame>
 
 ### Run pipelines on a schedule
@@ -186,8 +186,8 @@ With these settings, the orchestrator will use a GPU-enabled Spark version and a
 
 #### Enabling CUDA for GPU-backed hardware
 
-Note that if you wish to use this orchestrator to run steps on a GPU, you will need to follow [the instructions on this page](/latest/usage/resource-data-management/training-with-gpus) to ensure that it works. It requires adding some extra settings customization and is essential to enable CUDA for the GPU to give its full acceleration.
+Note that if you wish to use this orchestrator to run steps on a GPU, you will need to follow [the instructions on this page](/v/0.67.0/versions/0.66.0/how-to/training-with-gpus) to ensure that it works. It requires adding some extra settings customization and is essential to enable CUDA for the GPU to give its full acceleration.
 
-Check out the [SDK docs](https://sdkdocs.zenml.io/latest/integration%5Fcode%5Fdocs/integrations-databricks/#zenml.integrations.databricks.flavors.databricks%5Forchestrator%5Fflavor.DatabricksOrchestratorSettings) for a full list of available attributes and [this docs page](/latest/usage/project-setup/use-configuration-files/runtime-configuration) for more information on how to specify settings.
+Check out the [SDK docs](https://sdkdocs.zenml.io/latest/integration%5Fcode%5Fdocs/integrations-databricks/#zenml.integrations.databricks.flavors.databricks%5Forchestrator%5Fflavor.DatabricksOrchestratorSettings) for a full list of available attributes and [this docs page](/v/0.67.0/versions/0.66.0/how-to/use-configuration-files/runtime-configuration) for more information on how to specify settings.
 
 For more information and a full list of configurable attributes of the Databricks orchestrator, check out the [SDK Docs](https://sdkdocs.zenml.io/latest/integration%5Fcode%5Fdocs/integrations-databricks/#zenml.integrations.databricks.orchestrators.databricks%5Forchestrator.DatabricksOrchestrator) .

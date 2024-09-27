@@ -9,7 +9,7 @@ Annotators are a stack component that enables the use of data annotation as part
 Data annotation/labeling is a core part of MLOps that is frequently left out of the conversation. ZenML will incrementally start to build features that support an iterative annotation workflow that sees the people doing labeling (and their workflows/behaviors) as integrated parts of their ML process(es).
 
 <Frame caption="When and where to annotate.">
-  <img src="/_assets/stack-components/stack-components-34.png"/>
+  <img src="/images/stack-components/stack-components-34.png"/>
 </Frame>
 
 
@@ -40,11 +40,11 @@ For production use cases, some more flavors can be found in specific `integratio
 
 | Annotator                                                         | Flavor        | Integration                                                          | Notes                                                                               |
 | ----------------------------------------------------------------- | ------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| [ArgillaAnnotator](/latest/stack-components/annotators/argilla)          | argilla       | argilla                                                              | Connect ZenML with Argilla                                                          |
-| [LabelStudioAnnotator](/latest/stack-components/annotators/label-studio) | label\_studio | label\_studio                                                        | Connect ZenML with Label Studio                                                     |
-| [PigeonAnnotator](/latest/stack-components/annotators/pigeon)            | pigeon        | pigeon                                                               | Connect ZenML with Pigeon. Notebook only & for image and text classification tasks. |
-| [ProdigyAnnotator](/latest/stack-components/annotators/prodigy)          | prodigy       | prodigy                                                              | Connect ZenML with [Prodigy](https://prodi.gy/)                                     |
-| [Custom Implementation](/latest/stack-components/annotators/custom)      | _custom_      | Extend the annotator abstraction and provide your own implementation |                                                                                     |
+| [ArgillaAnnotator](/v/0.67.0/versions/0.66.0/stack-components/annotators/argilla)          | argilla       | argilla                                                              | Connect ZenML with Argilla                                                          |
+| [LabelStudioAnnotator](/v/0.67.0/versions/0.66.0/stack-components/annotators/label-studio) | label\_studio | label\_studio                                                        | Connect ZenML with Label Studio                                                     |
+| [PigeonAnnotator](/v/0.67.0/versions/0.66.0/stack-components/annotators/pigeon)            | pigeon        | pigeon                                                               | Connect ZenML with Pigeon. Notebook only & for image and text classification tasks. |
+| [ProdigyAnnotator](/v/0.67.0/versions/0.66.0/stack-components/annotators/prodigy)          | prodigy       | prodigy                                                              | Connect ZenML with [Prodigy](https://prodi.gy/)                                     |
+| [Custom Implementation](/v/0.67.0/versions/0.66.0/stack-components/annotators/custom)      | _custom_      | Extend the annotator abstraction and provide your own implementation |                                                                                     |
 
 If you would like to see the available flavors for annotators, you can use the command:
 
@@ -54,7 +54,7 @@ zenml annotator flavor list
 
 ### How to use it
 
-The available implementation of the annotator is built on top of the Label Studio integration, which means that using an annotator currently is no different from what's described on the [Label Studio page: How to use it?](/latest/stack-components/annotators/label-studio#how-do-you-use-it). ([Pigeon](/latest/stack-components/annotators/pigeon) is also supported, but has a very limited functionality and only works within Jupyter notebooks.)
+The available implementation of the annotator is built on top of the Label Studio integration, which means that using an annotator currently is no different from what's described on the [Label Studio page: How to use it?](/v/0.67.0/versions/0.66.0/stack-components/annotators/label-studio#how-do-you-use-it). ([Pigeon](/v/0.67.0/versions/0.66.0/stack-components/annotators/pigeon) is also supported, but has a very limited functionality and only works within Jupyter notebooks.)
 
 ### A note on names
 

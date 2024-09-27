@@ -4,7 +4,7 @@ description: "How to collect and visualize statistics to track changes in your p
 icon: clipboard-question
 ---
 
-The whylogs/WhyLabs [Data Validator](/latest/stack-components/data-validators) flavor provided with the ZenML integration uses [whylogs](https://whylabs.ai/whylogs) and [WhyLabs](https://whylabs.ai) to generate and track data profiles, highly accurate descriptive representations of your data. The profiles can be used to implement automated corrective actions in your pipelines, or to render interactive representations for further visual interpretation, evaluation and documentation.
+The whylogs/WhyLabs [Data Validator](/v/0.67.0/versions/0.66.0/stack-components/data-validators) flavor provided with the ZenML integration uses [whylogs](https://whylabs.ai/whylogs) and [WhyLabs](https://whylabs.ai) to generate and track data profiles, highly accurate descriptive representations of your data. The profiles can be used to implement automated corrective actions in your pipelines, or to render interactive representations for further visual interpretation, evaluation and documentation.
 
 ### When would you want to use it?
 
@@ -16,7 +16,7 @@ You should use the whylogs/WhyLabs Data Validator when you need the following da
 * Data Drift: detect data drift in model input features
 * Model Drift: Detect training-serving skew, concept drift, and model performance degradation
 
-You should consider one of the other [Data Validator flavors](/latest/stack-components/data-validators#data-validator-flavors) if you need a different set of data validation features.
+You should consider one of the other [Data Validator flavors](/v/0.67.0/versions/0.66.0/stack-components/data-validators#data-validator-flavors) if you need a different set of data validation features.
 
 ### How do you deploy it?
 
@@ -36,7 +36,7 @@ zenml data-validator register whylogs_data_validator --flavor=whylogs
 zenml stack register custom_stack -dv whylogs_data_validator ... --set
 ```
 
-Adding WhyLabs logging capabilities to your whylogs Data Validator is just slightly more complicated, as you also need to create a [ZenML Secret](/latest/usage/project-setup/use-secrets/secret-management) to store the sensitive WhyLabs authentication information in a secure location and then reference the secret in the Data Validator configuration. To generate a WhyLabs access token, you can follow [the official WhyLabs instructions documented here](https://docs.whylabs.ai/docs/whylabs-api/#creating-an-api-token) .
+Adding WhyLabs logging capabilities to your whylogs Data Validator is just slightly more complicated, as you also need to create a [ZenML Secret](/v/0.67.0/versions/0.66.0/getting-started/deploying-zenml/secret-management) to store the sensitive WhyLabs authentication information in a secure location and then reference the secret in the Data Validator configuration. To generate a WhyLabs access token, you can follow [the official WhyLabs instructions documented here](https://docs.whylabs.ai/docs/whylabs-api/#creating-an-api-token) .
 
 Then, you can register the whylogs Data Validator with WhyLabs logging capabilities as follows:
 
@@ -94,11 +94,11 @@ Whylogs's profiling functions take in a `pandas.DataFrame` dataset generate a `D
 
 There are three ways you can use whylogs in your ZenML pipelines that allow different levels of flexibility:
 
-* instantiate, configure and insert [the standard WhylogsProfilerStep](/latest/stack-components/data-validators/whylogs#the-whylogs-standard-step) shipped with ZenML into your pipelines. This is the easiest way and the recommended approach, but can only be customized through the supported step configuration parameters.
-* call the data validation methods provided by [the whylogs Data Validator](/latest/stack-components/data-validators/whylogs#the-whylogs-data-validator) in your custom step implementation. This method allows for more flexibility concerning what can happen in the pipeline step, but you are still limited to the functionality implemented in the Data Validator.
-* [use the whylogs library directly](/latest/stack-components/data-validators/whylogs#call-whylogs-directly) in your custom step implementation. This gives you complete freedom in how you are using whylogs's features.
+* instantiate, configure and insert [the standard WhylogsProfilerStep](/v/0.67.0/versions/0.66.0/stack-components/data-validators/whylogs#the-whylogs-standard-step) shipped with ZenML into your pipelines. This is the easiest way and the recommended approach, but can only be customized through the supported step configuration parameters.
+* call the data validation methods provided by [the whylogs Data Validator](/v/0.67.0/versions/0.66.0/stack-components/data-validators/whylogs#the-whylogs-data-validator) in your custom step implementation. This method allows for more flexibility concerning what can happen in the pipeline step, but you are still limited to the functionality implemented in the Data Validator.
+* [use the whylogs library directly](/v/0.67.0/versions/0.66.0/stack-components/data-validators/whylogs#call-whylogs-directly) in your custom step implementation. This gives you complete freedom in how you are using whylogs's features.
 
-You can [visualize whylogs profiles](/latest/stack-components/data-validators/whylogs#visualizing-whylogs-profiles) in Jupyter notebooks or view them directly in the ZenML dashboard.
+You can [visualize whylogs profiles](/v/0.67.0/versions/0.66.0/stack-components/data-validators/whylogs#visualizing-whylogs-profiles) in Jupyter notebooks or view them directly in the ZenML dashboard.
 
 #### The whylogs standard step
 
@@ -247,7 +247,7 @@ def data_profiler(
 
 You can view visualizations of the whylogs profiles generated by your pipeline steps directly in the ZenML dashboard by clicking on the respective artifact in the pipeline run DAG.
 
-Alternatively, if you are running inside a Jupyter notebook, you can load and render the whylogs profiles using the [artifact.visualize() method](/latest/usage/resource-data-management/visualize-artifacts), e.g.:
+Alternatively, if you are running inside a Jupyter notebook, you can load and render the whylogs profiles using the [artifact.visualize() method](/v/0.67.0/versions/0.66.0/how-to/visualize-artifacts), e.g.:
 
 ```py
 from zenml.client import Client
@@ -275,11 +275,11 @@ if __name__ == "__main__":
 ```
 
 <Frame caption="Whylogs Visualization Example 1">
-  <img src="/_assets/stack-components/stack-components-19.avif"/>
+  <img src="/images/stack-components/stack-components-19.avif"/>
 </Frame>
 
 <Frame caption="Whylogs Visualization Example 2">
-  <img src="/_assets/stack-components/stack-components-20.avif"/>
+  <img src="/images/stack-components/stack-components-20.avif"/>
 </Frame>
 
 

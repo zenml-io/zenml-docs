@@ -4,7 +4,7 @@ description: "Learn how to implement evaluation for RAG in just 65 lines of code
 icon: code
 ---
 
-Our RAG guide included [a short example](/latest/user-guide/guides/llmops-guide/rag-with-zenml/rag-85-loc) for how to implement a basic RAG pipeline in just 85 lines of code. In this section, we'll build on that example to show how you can evaluate the performance of your RAG pipeline in just 65 lines. For the full code, please visit the project repository [here](https://github.com/zenml-io/zenml-projects/blob/main/llm-complete-guide/most%5Fbasic%5Feval.py). The code that follows requires the functions from the earlier RAG pipeline code to work.
+Our RAG guide included [a short example](/v/0.67.0/versions/0.66.0/user-guide/llmops-guide/rag-with-zenml/rag-85-loc) for how to implement a basic RAG pipeline in just 85 lines of code. In this section, we'll build on that example to show how you can evaluate the performance of your RAG pipeline in just 65 lines. For the full code, please visit the project repository [here](https://github.com/zenml-io/zenml-projects/blob/main/llm-complete-guide/most%5Fbasic%5Feval.py). The code that follows requires the functions from the earlier RAG pipeline code to work.
 
 ```py
 # ...previous RAG pipeline code here...
@@ -82,7 +82,7 @@ As you can see, we've added two evaluation functions: `evaluate_retrieval` and `
 We then loop through the evaluation data, which contains questions and expected answers, and evaluate the retrieval and generation components of our RAG pipeline. Finally, we calculate the accuracy of both components and print the results:
 
 <Frame>
-  <img src="/_assets/user-guide/ev-m-1.avif"/>
+  <img src="/images/user-guide/ev-m-1.avif"/>
 </Frame>
 As you can see, we get 100% accuracy for both retrieval and generation in this example. Not bad! The sections that follow will provide a more detailed and sophisticated implementation of RAG evaluation, but this example shows how you can think about it at a high level!
 

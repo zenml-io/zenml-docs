@@ -6,7 +6,7 @@ icon: palette
 
 Data sits at the heart of every machine learning workflow. Managing and versioning this data correctly is essential for reproducibility and traceability within your ML pipelines. ZenML takes a proactive approach to data versioning, ensuring that every artifact—be it data, models, or evaluations—is automatically tracked and versioned upon pipeline execution.
 <Frame caption="Walkthrough of ZenML Artifact Control Plane (Dashboard available only on ZenML Pro)">
-  <img src="/_assets/user-guide/starter-guide/Fdcp_walkthrough.gif" />
+  <img src="/images/user-guide/starter-guide/Fdcp_walkthrough.gif" />
 </Frame>
 
 This guide will delve into artifact versioning and management, showing you how to efficiently name, organize, and utilize your data with the ZenML framework.
@@ -55,7 +55,7 @@ To list artifacts: `zenml artifact list`
 <Tab title="Cloud (Dashboard)">
 The [ZenML Pro](https://zenml.io/pro) dashboard offers advanced visualization features for artifact exploration.
 <Frame caption="ZenML Artifact Control Plane.">
-  <img src="/_assets/user-guide/starter-guide/Fdcp_artifacts_list.png" />
+  <img src="/images/user-guide/starter-guide/Fdcp_artifacts_list.png" />
 </Frame>
 </Tab>
 </Tabs>
@@ -88,7 +88,7 @@ def training_data_loader() -> (
 The next execution of this step will then create an artifact with the name `iris_dataset` and version `raw_2023`. This is primarily useful if you are making a particularly important pipeline run (such as a release) whose artifacts you want to distinguish at a glance later.
 
 <Note>
-Since custom versions cannot be duplicated, the above step can only be run once successfully. To avoid altering your code frequently, consider using a [YAML config](/latest/user-guide/guides/production-guide/configure-pipeline) for artifact versioning.
+Since custom versions cannot be duplicated, the above step can only be run once successfully. To avoid altering your code frequently, consider using a [YAML config](/v/0.67.0/versions/0.66.0/user-guide/production-guide/configure-pipeline) for artifact versioning.
 </Note>
 
 After execution, `iris_dataset` and its version `raw_2023` can be seen using:
@@ -99,7 +99,7 @@ To list versions: `zenml artifact version list`
 <Tab title="Cloud (Dashboard)">
 The Cloud dashboard visualizes version history for your review.
 <Frame caption="ZenML Data Versions List.">
-  <img src="/_assets/user-guide/starter-guide/Fdcp_artifacts_versions_list.png" />
+  <img src="/images/user-guide/starter-guide/Fdcp_artifacts_versions_list.png" />
 </Frame>
 </Tab>
 </Tabs>
@@ -191,7 +191,7 @@ if __name__ == "__main__":
     printing_pipeline()
 ```
 
-Optionally, you can configure the `ExternalArtifact` to use a custom [materializer](/latest/usage/resource-data-management/handle-data-artifacts/handle-custom-data-types) for your data or disable artifact metadata and visualizations. Check out the [SDK docs](https://sdkdocs.zenml.io/latest/core%5Fcode%5Fdocs/core-artifacts/#zenml.artifacts.external%5Fartifact.ExternalArtifact) for all available options.
+Optionally, you can configure the `ExternalArtifact` to use a custom [materializer](/v/0.67.0/versions/0.66.0/how-to/handle-data-artifacts/handle-custom-data-types) for your data or disable artifact metadata and visualizations. Check out the [SDK docs](https://sdkdocs.zenml.io/latest/core%5Fcode%5Fdocs/core-artifacts/#zenml.artifacts.external%5Fartifact.ExternalArtifact) for all available options.
 
 <Info>
 Using an `ExternalArtifact` for your step automatically disables caching for the step.
@@ -199,7 +199,7 @@ Using an `ExternalArtifact` for your step automatically disables caching for the
 
 ### Consuming artifacts produced by other pipelines
 
-It is also common to consume an artifact downstream after producing it in an upstream pipeline or step. As we have learned in the [previous section](/latest/usage/pipelines/build-pipelines/fetching-pipelines#fetching-artifacts-directly), the `Client` can be used to fetch artifacts directly inside the pipeline code:
+It is also common to consume an artifact downstream after producing it in an upstream pipeline or step. As we have learned in the [previous section](/v/0.67.0/versions/0.66.0/how-to/build-pipelines/fetching-pipelines#fetching-artifacts-directly), the `Client` can be used to fetch artifacts directly inside the pipeline code:
 
 ```py
 from uuid import UUID
@@ -237,7 +237,7 @@ if __name__ == "__main__":
 ```
 
 <Info>
-Calls of `Client` methods like `get_artifact_version` directly inside the pipeline code makes use of ZenML's [late materialization](/latest/usage/resource-data-management/handle-data-artifacts/load-artifacts-into-memory) behind the scenes.
+Calls of `Client` methods like `get_artifact_version` directly inside the pipeline code makes use of ZenML's [late materialization](/v/0.67.0/versions/0.66.0/how-to/handle-data-artifacts/load-artifacts-into-memory) behind the scenes.
 </Info>
 
 If you would like to bypass materialization entirely and just download the data or files associated with a particular artifact version, you can use the `.download_files` method:
@@ -302,7 +302,7 @@ It is also possible to use these functions inside your ZenML steps. However, it 
 
 ## Logging metadata for an artifact
 
-One of the most useful ways of interacting with artifacts in ZenML is the ability to associate metadata with them. [As mentioned before](/latest/usage/pipelines/build-pipelines/fetching-pipelines#artifact-information), artifact metadata is an arbitrary dictionary of key-value pairs that are useful for understanding the nature of the data.
+One of the most useful ways of interacting with artifacts in ZenML is the ability to associate metadata with them. [As mentioned before](/v/0.67.0/versions/0.66.0/how-to/build-pipelines/fetching-pipelines#artifact-information), artifact metadata is an arbitrary dictionary of key-value pairs that are useful for understanding the nature of the data.
 
 As an example, one can associate the results of a model training alongside a model artifact, the shape of a table alongside a `pandas` dataframe, or the size of an image alongside a PNG file.
 
@@ -324,14 +324,14 @@ artifact.run_metadata["shape"].value  # Shape e.g. (500,20)
 <Tab title="OSS (Dashboard)">
 The information regarding the metadata of an artifact can be found within the DAG visualizer interface on the OSS dashboard:
 <Frame caption="ZenML Artifact Control Plane.">
-  <img src="/_assets/user-guide/starter-guide/Fdashboard_artifact_metadata.png" />
+  <img src="/images/user-guide/starter-guide/Fdashboard_artifact_metadata.png" />
 </Frame>
 </Tab>
 <Tab title="Cloud (Dashboard)">
 The [ZenML Pro](https://zenml.io/pro) dashboard offers advanced visualization features for artifact exploration, including a dedicated artifacts tab with metadata visualization:
 
 <Frame caption="ZenML Artifact Control Plane.">
-  <img src="/_assets/user-guide/starter-guide/Fdcp_metadata.png" />
+  <img src="/images/user-guide/starter-guide/Fdcp_metadata.png" />
 </Frame>
 </Tab>
 </Tabs>
@@ -367,9 +367,9 @@ def model_finetuner_step(
     return model
 ```
 
-For further depth, there is an [advanced metadata logging guide](/latest/usage/resource-data-management/track-metrics-metadata) that goes more into detail about logging metadata in ZenML.
+For further depth, there is an [advanced metadata logging guide](/v/0.67.0/versions/0.66.0/how-to/track-metrics-metadata) that goes more into detail about logging metadata in ZenML.
 
-Additionally, there is a lot more to learn about artifacts within ZenML. Please read the [dedicated data management guide](/latest/usage/resource-data-management/handle-data-artifacts) for more information.
+Additionally, there is a lot more to learn about artifacts within ZenML. Please read the [dedicated data management guide](/v/0.67.0/versions/0.66.0/how-to/handle-data-artifacts) for more information.
 
 ## Code example
 
@@ -471,12 +471,12 @@ This would create the following pipeline run DAGs:
 
 **Run 1:**
 <Frame>
-  <img src="/_assets/user-guide/starter-guide/Fartifact_management_1.png" />
+  <img src="/images/user-guide/starter-guide/Fartifact_management_1.png" />
 </Frame>
 
 **Run 2:**
 <Frame>
-  <img src="/_assets/user-guide/starter-guide/Fartifact_management_2.png" />
+  <img src="/images/user-guide/starter-guide/Fartifact_management_2.png" />
 </Frame>
 </Accordion>
 
