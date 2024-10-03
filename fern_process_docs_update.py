@@ -57,9 +57,18 @@ def process_docs_update(new_version: str) -> None:
     root_dir = "fern"
     os.chdir(root_dir)
 
+    # delete the temp_docs folder if it exists
+    if os.path.exists("temp_docs"):
+        shutil.rmtree("temp_docs")
+
     # Extract the zip file
     with zipfile.ZipFile("../docs_data.zip", "r") as zip_ref:
         zip_ref.extractall("temp_docs")
+
+    # move the contents inside the temp_docs/fern dir to temp_docs
+    for item in os.listdir("temp_docs/fern"):
+        shutil.move(os.path.join("temp_docs/fern", item), "temp_docs")
+    os.rmdir(os.path.join("temp_docs", "fern"))
 
     # Read existing docs.yml if it exists
     if os.path.exists("docs.yml"):
@@ -108,6 +117,8 @@ def process_docs_update(new_version: str) -> None:
     # Copy and update version file
     version_file = f"{new_version}.yml"
     version_file_path = os.path.join("versions", version_file)
+    # create the versions dir if it doesn't exist
+    os.makedirs(os.path.join("versions"), exist_ok=True)
     if os.path.exists(version_file_path):
         os.remove(version_file_path)
     shutil.copy(
