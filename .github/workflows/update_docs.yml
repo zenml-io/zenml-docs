@@ -1,6 +1,9 @@
 name: Update Docs
 
 on:
+  push:
+    branches:
+      - scripts/fern-structure
   repository_dispatch:
     types: [update_docs]
 
@@ -30,17 +33,16 @@ jobs:
             -H "Accept: application/vnd.github.v3+json" \
             https://api.github.com/repos/zenml-io/zenml/actions/artifacts/latest/zip \
             --output docs_data.zip
-          unzip docs_data.zip
 
-      - name: Process docs update
-        run: |
-          python scripts/process_docs_update.py \
-            --version ${{ github.event.client_payload.version }}
+      # - name: Process docs update
+      #   run: |
+      #     python scripts/process_docs_update.py \
+      #       --version ${{ github.event.client_payload.version }}
 
-      - name: Commit and push changes
-        run: |
-          git config user.name "GitHub Actions Bot"
-          git config user.email "<>"
-          git add .
-          git commit -m "Sync docs for version ${{ github.event.client_payload.version }}" || echo "No changes to commit"
-          git push
+      # - name: Commit and push changes
+      #   run: |
+      #     git config user.name "GitHub Actions Bot"
+      #     git config user.email "<>"
+      #     git add .
+      #     git commit -m "Sync docs for version ${{ github.event.client_payload.version }}" || echo "No changes to commit"
+      #     git push
