@@ -28,6 +28,39 @@ def get_biggest_version(versions: List[str]) -> str:
     sorted_versions = sort_versions([v for v in versions if v != "develop"])
     return sorted_versions[0] if sorted_versions else None
 
+def is_biggest_version(version: str, versions: List[str]) -> bool:
+    versions = versions + [version] if version not in versions else versions
+    return version == get_biggest_version(versions)
+
+def override_latest_path(file_path: str, version: str) -> None:
+    """This function will remove the ../latest prefix and add the ../all/version prefix"""
+    with open(file_path, 'r') as f:
+        content = yaml.safe_load(f)
+
+    def update_paths(item):
+        if isinstance(item, dict):
+            for key, value in item.items():
+                if key == 'path' and isinstance(value, str):
+                    if value.startswith('../latest/'):
+                        item[key] = f"../all/{version}/{value.lstrip('../latest/')}"
+                    elif value.startswith('../'):
+                        item[key] = f"../all/{version}/{value.lstrip('../')}"
+                elif isinstance(value, (dict, list)):
+                    update_paths(value)
+                elif key == 'summary' and isinstance(value, str):
+                    if value.startswith('../latest/'):
+                        item[key] = f"../all/{version}/{value.lstrip('../latest/')}"
+                    elif value.startswith('../'):
+                        item[key] = f"../all/{version}/{value.lstrip('../')}"
+        elif isinstance(item, list):
+            for i in item:
+                update_paths(i)
+
+    update_paths(content)
+
+    with open(file_path, 'w') as f:
+        yaml.dump(content, f, sort_keys=False)
+
 def update_version_file_paths(file_path: str, version: str, is_latest: bool) -> None:
     with open(file_path, 'r') as f:
         content = yaml.safe_load(f)
@@ -44,6 +77,13 @@ def update_version_file_paths(file_path: str, version: str, is_latest: bool) -> 
                         item[key] = f"../all/{version}/{value.lstrip('../')}"
                 elif isinstance(value, (dict, list)):
                     update_paths(value)
+                elif key == 'summary' and isinstance(value, str):
+                    if version == 'develop':
+                        item[key] = f"../develop/{value.lstrip('../')}"
+                    elif is_latest:
+                        item[key] = f"../latest/{value.lstrip('../')}"
+                    else:
+                        item[key] = f"../all/{version}/{value.lstrip('../')}"
         elif isinstance(item, list):
             for i in item:
                 update_paths(i)
@@ -70,6 +110,22 @@ def process_docs_update(new_version: str) -> None:
         shutil.move(os.path.join("temp_docs/fern", item), "temp_docs")
     os.rmdir(os.path.join("temp_docs", "fern"))
 
+    # copy and replace if they exist the fern.config.json, generators.yml, openapi/, _assets/folder from the
+    # temp_docs dir to the current dir
+    if os.path.exists("fern.config.json"):
+        os.remove("fern.config.json")
+        shutil.copy(os.path.join("temp_docs", "fern.config.json"), "fern.config.json")
+    if os.path.exists("generators.yml"):
+        os.remove("generators.yml")
+        shutil.copy(os.path.join("temp_docs", "generators.yml"), "generators.yml")
+    if os.path.exists("openapi"):
+        shutil.rmtree("openapi")
+        shutil.copytree(os.path.join("temp_docs", "openapi"), "openapi")
+    if os.path.exists("_assets"):
+        shutil.rmtree("_assets")
+        shutil.copytree(os.path.join("temp_docs", "_assets"), "_assets")
+
+
     # Read existing docs.yml if it exists
     if os.path.exists("docs.yml"):
         with open("docs.yml", "r") as f:
@@ -83,7 +139,61 @@ def process_docs_update(new_version: str) -> None:
 
     # Preserve existing versions and add new version
     existing_versions = {v['display-name']: v for v in existing_config.get('versions', [])}
-    
+    existing_versions_keys = [v for v in existing_versions]
+
+    if new_version == "develop":
+        destination_path_prefix = "develop"
+        is_latest = False
+        if "develop" in existing_versions_keys:
+            # Clean up existing develop directory
+            shutil.rmtree("develop", ignore_errors=True)
+
+        # Copy new develop content
+        shutil.copytree(os.path.join("temp_docs", "pages"), "develop")
+        # also copy the _assets folder
+        shutil.copytree(os.path.join("temp_docs", "_assets"), os.path.join("develop", "_assets"))
+        
+    elif new_version in existing_versions_keys:
+        if is_biggest_version(new_version, existing_versions_keys):
+            destination_path_prefix = "latest"
+            is_latest = True
+        else:
+            destination_path_prefix = f"all/{new_version}"
+            is_latest = False
+        
+        # Clean up existing version directory
+        shutil.rmtree(destination_path_prefix, ignore_errors=True)
+        
+        # Copy new version content
+        shutil.copytree(os.path.join("temp_docs", "pages"), destination_path_prefix)
+        # also copy the _assets folder
+        shutil.copytree(os.path.join("temp_docs", "_assets"), os.path.join(destination_path_prefix, "_assets"))
+    else:
+        # New version
+        if is_biggest_version(new_version, existing_versions_keys):
+            # This is a new latest version
+            destination_path_prefix = "latest"
+            is_latest = True
+            # Move current latest to all directory if it exists
+            current_latest = get_biggest_version(existing_versions_keys)
+            if current_latest and os.path.exists("latest"):
+                shutil.move("latest", f"all/{current_latest}")
+                
+                # Update paths in the previous latest version file
+                prev_latest_file = os.path.join("versions", f"{current_latest}.yml")
+                if os.path.exists(prev_latest_file):
+                    override_latest_path(prev_latest_file, current_latest)
+        else:
+            destination_path_prefix = f"all/{new_version}"
+            is_latest = False
+        
+        # Copy new version content
+        shutil.copytree(os.path.join("temp_docs", "pages"), destination_path_prefix)
+        # also copy the _assets folder
+        shutil.copytree(os.path.join("temp_docs", "_assets"), os.path.join(destination_path_prefix, "_assets"))
+        
+        # Add new version to the list
+        existing_versions_keys.append(new_version)
 
     new_version_entry = {
         "display-name": new_version,
@@ -94,25 +204,6 @@ def process_docs_update(new_version: str) -> None:
     # Sort versions and update config
     sorted_versions = sort_versions(list(existing_versions.keys()))
     new_config['versions'] = [existing_versions[v] for v in sorted_versions if v in existing_versions]
-
-    # Determine if the new version is the latest
-    biggest_version = get_biggest_version(sorted_versions)
-    is_latest = new_version == biggest_version
-
-    # Handle all versions including 'develop'
-    if new_version == "develop":
-        target_dir = "develop"
-        pages_dir = target_dir
-    elif is_latest:
-        target_dir = "latest"
-        pages_dir = target_dir
-    else:
-        target_dir = "all"
-        pages_dir = os.path.join(target_dir, new_version)
-
-    # Copy pages
-    shutil.rmtree(pages_dir, ignore_errors=True)
-    shutil.copytree(os.path.join("temp_docs", "pages"), pages_dir)
 
     # Copy and update version file
     version_file = f"{new_version}.yml"
