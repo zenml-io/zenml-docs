@@ -1,0 +1,31 @@
+.fern-background {
+  background-image: linear-gradient(0deg, #7a3ef440, transparent) !important;
+}
+
+.side {
+  width: 50%;
+  padding-left: 0.5rem;
+  margin-left: 0.5rem;
+  float: right;
+}
+
+.column {
+  display: flex;
+  width: 50%;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.fern-accordion {
+  width: 100%;
+}
+
+.fern-accordion .m-5 {
+  display: flex;
+  flex-direction: column;
+}
