@@ -105,11 +105,6 @@ def process_docs_update(new_version: str) -> None:
     with zipfile.ZipFile("../docs_data.zip", "r") as zip_ref:
         zip_ref.extractall("temp_docs")
 
-    # move the contents inside the temp_docs/fern dir to temp_docs
-    for item in os.listdir("temp_docs/fern"):
-        shutil.move(os.path.join("temp_docs/fern", item), "temp_docs")
-    os.rmdir(os.path.join("temp_docs", "fern"))
-
     # copy and replace if they exist the fern.config.json, generators.yml, openapi/, _assets/folder from the
     # temp_docs dir to the current dir
     if os.path.exists("fern.config.json"):
