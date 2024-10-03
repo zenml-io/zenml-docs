@@ -1,0 +1,96 @@
+---
+title: Sklearn
+slug: sdk/integration-docs/v1/integrations-sklearn
+layout: reference
+---
+<div class="page">
+
+## **`zenml.integrations.sklearn`** _special_
+Initialization of the sklearn integration.
+
+
+<Accordion title="SklearnIntegration">
+<div class="row">
+<div class="column">
+Definition of [sklearn integration for ZenML]((https://sdkdocs.zenml.io/0.66.0/integration_code_docs/integrations-integration/#zenml.integrations.integration.Integration)).
+</div>
+
+<div class="side">
+```python zenml/integrations/sklearn/__init__.py
+class SklearnIntegration(Integration):
+    """Definition of sklearn integration for ZenML."""
+
+    NAME = SKLEARN
+    REQUIREMENTS = ["scikit-learn", "scikit-image"]
+
+    @classmethod
+    def activate(cls) -> None:
+        """Activates the integration."""
+        from zenml.integrations.sklearn import materializers  # noqa
+```
+</div>
+</div>
+<div class="row">
+
+<div class="column">
+**`activate()`** _classmethod_
+
+Activates the integration.
+</div>
+
+<div class="side">
+<div class="sticky">
+```python zenml/integrations/sklearn/__init__.py
+@classmethod
+def activate(cls) -> None:
+    """Activates the integration."""
+    from zenml.integrations.sklearn import materializers  # noqa
+```
+</div>
+</div>
+
+</div>
+</Accordion>
+
+
+<div class="row">
+<Accordion title="Materializers">
+<div class="row">
+<div class="column">
+Initialization of the sklearn materializer.
+
+**`sklearn_materializer`** 
+
+Implementation of the sklearn materializer.
+
+`SklearnMaterializer` _([CloudpickleMaterializer](https://sdkdocs.zenml.io/0.66.0/core_code_docs/core-materializers/#zenml.materializers.cloudpickle_materializer.CloudpickleMaterializer))_
+
+Materializer to read data to and from sklearn.
+</div>
+<div class="side">
+```python zenml/integrations/sklearn/materializers/sklearn_materializer.py
+class SklearnMaterializer(CloudpickleMaterializer):
+    """Materializer to read data to and from sklearn."""
+
+    ASSOCIATED_TYPES: ClassVar[Tuple[Type[Any], ...]] = (
+        BaseEstimator,
+        ClassifierMixin,
+        ClusterMixin,
+        BiclusterMixin,
+        OutlierMixin,
+        RegressorMixin,
+        MetaEstimatorMixin,
+        MultiOutputMixin,
+        DensityMixin,
+        TransformerMixin,
+    )
+    ASSOCIATED_ARTIFACT_TYPE: ClassVar[ArtifactType] = ArtifactType.MODEL
+
+```
+</div>
+</div>
+</Accordion>
+</div>
+</div>
+
+

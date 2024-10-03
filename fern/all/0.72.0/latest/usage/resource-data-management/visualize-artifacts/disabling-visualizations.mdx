@@ -1,0 +1,19 @@
+---
+title: Disabling visualizations
+subtitle: Disabling visualizations.
+slug: usage/resource-data-management/visualize-artifacts/disabling-visualizations
+---
+
+
+If you would like to disable artifact visualization altogether, you can set `enable_artifact_visualization` at either pipeline or step level:
+
+```py
+
+@step(enable_artifact_visualization=False)
+def my_step():
+    ...
+
+@pipeline(enable_artifact_visualization=False)
+def my_pipeline():
+    ...
+```

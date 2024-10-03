@@ -1,0 +1,26 @@
+---
+title: Default visualizations
+subtitle: Types of visualizations in ZenML.
+slug: usage/resource-data-management/visualize-artifacts/types-of-visualizations
+---
+
+
+ZenML automatically saves visualizations of many common data types and allows you to view these visualizations in the ZenML dashboard:
+<Frame caption="A simple artifact exchange between two pipelines">
+  <img src="../../../_assets/how-to/stack-56.png"/>
+</Frame>
+
+Alternatively, any of these visualizations can also be displayed in Jupyter notebooks using the `artifact.visualize()` method:
+<Frame caption="output.visualize() Output">
+  <img src="../../../_assets/how-to/stack-57.png"/>
+</Frame>
+
+Some examples of default visualizations are:
+
+* A statistical representation of a [Pandas](https://pandas.pydata.org/docsversions/0.66.0/reference/api/pandas.DataFrame.html) Dataframe represented as a png image.
+* Drift detection reports by [Evidently](../../../stack-components/data-validators/evidently.mdx), [Great Expectations](../../../stack-components/data-validators/great-expectations.mdx), and [whylogs](../../../stack-components/data-validators/whylogs.mdx).
+* A [Hugging Face](https://zenml.io/integrations/huggingface) datasets viewer embedded as a HTML iframe.
+<Frame caption="output.visualize() output for the Hugging Face datasets viewer">
+  <img src="../../../_assets/how-to/stack-58.gif"/>
+</Frame>
+

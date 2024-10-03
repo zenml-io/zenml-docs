@@ -1,0 +1,49 @@
+instances:
+- url: https://zenml.docs.buildwithfern.com
+title: ZenML | Documentation
+logo:
+  light: _assets/logo/light.svg
+  dark: _assets/logo/dark.svg
+  height: 28
+favicon: _assets/favicon.png
+colors:
+  accent-primary:
+    dark: '#7a3ef4'
+    light: '#7a3ef4'
+  background:
+    dark: '#000000'
+    light: '#ffffff'
+  header-background:
+    dark: '#000000'
+    light: '#ffffff'
+css: _assets/custom.css
+navbar-links:
+- type: github
+  value: https://github.com/zenml-io/zenml
+- type: secondary
+  text: Support
+  url: https://zenml.io/slack
+- type: filled
+  text: Dashboard
+  url: https://cloud.zenml.io/signup?utm_source=website&utm_medium=website_nav&utm_campaign=cloud_promotion&utm_content=signup_link
+layout:
+  tabs-placement: header
+  searchbar-placement: header
+typography:
+  bodyFont:
+    name: PlusJakartaSans
+    paths:
+    - path: ./_assets/PlusJakartaSans.woff2
+      weight: '400'
+    - path: ./_assets/PlusJakartaSans-SemiBold.woff2
+      weight: '500'
+  headingsFont:
+    name: PlusJakartaSans
+    paths:
+    - path: ./_assets/PlusJakartaSans-Bold.woff2
+      weight: '600'
+versions:
+- display-name: 0.73.0
+  path: ./versions/0.73.0.yml
+- display-name: 0.72.0
+  path: ./versions/0.72.0.yml

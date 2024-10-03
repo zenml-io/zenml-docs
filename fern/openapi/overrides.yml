@@ -1,0 +1,16 @@
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      x-fern-bearer: 
+        name: apiKey
+        env: ZENML_API_KEY
+security:
+  - BearerAuth: []
+  
+servers:
+  - url: https://api.zenml.com
+    x-fern-server-name: Production
+  - url: https://sandbox.zenml.com
+    x-fern-server-name: Sandbox

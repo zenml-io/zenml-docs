@@ -1,0 +1,408 @@
+tabs:
+  Guides:
+    display-name: Guides
+    icon: solid book
+    slug: user-guide
+  SDK:
+    display-name: SDK
+    icon: solid terminal
+    slug: sdk
+  API:
+    display-name: API
+    icon: solid code
+    slug: api
+navigation:
+- tab: Guides
+  layout:
+  - section: "\U0001F4DA User Guides"
+    contents:
+    - section: ' Starter guide'
+      icon: solid egg
+      path: ../all/0.72.0/user-guide/guides/starter-guide.mdx
+      contents:
+      - page: Create an ML pipeline
+        path: ../all/0.72.0/user-guide/guides/starter-guide/create-an-ml-pipeline.mdx
+        icon: paper-plane
+      - page: Cache previous executions
+        path: ../all/0.72.0/user-guide/guides/starter-guide/cache-previous-executions.mdx
+        icon: clipboard-check
+      - page: Manage artifacts
+        path: ../all/0.72.0/user-guide/guides/starter-guide/manage-artifacts.mdx
+        icon: palette
+      - page: Track ML models
+        path: ../all/0.72.0/user-guide/guides/starter-guide/track-ml-models.mdx
+        icon: plane-departure
+      - page: A starter project
+        path: ../all/0.72.0/user-guide/guides/starter-guide/starter-project.mdx
+        icon: rocket
+    - section: ' Production guide'
+      icon: fa-brands fa-the-red-yeti
+      path: ../all/0.72.0/user-guide/guides/production-guide.mdx
+      contents:
+      - page: Deploying ZenML
+        path: ../all/0.72.0/user-guide/guides/production-guide/deploying-zenml.mdx
+        icon: rocket
+      - page: Understanding stacks
+        path: ../all/0.72.0/user-guide/guides/production-guide/understand-stacks.mdx
+        icon: layer-group
+      - page: Connecting remote storage
+        path: ../all/0.72.0/user-guide/guides/production-guide/remote-storage.mdx
+        icon: database
+      - page: Orchestrate on the cloud
+        path: ../all/0.72.0/user-guide/guides/production-guide/cloud-orchestration.mdx
+        icon: cloud
+      - page: Configure your pipeline to add compute
+        path: ../all/0.72.0/user-guide/guides/production-guide/configure-pipeline.mdx
+        icon: sliders
+      - page: Configure a code repository
+        path: ../all/0.72.0/user-guide/guides/production-guide/connect-code-repository.mdx
+        icon: code-branch
+      - page: Set up CI/CD
+        path: ../all/0.72.0/user-guide/guides/production-guide/ci-cd.mdx
+        icon: gear
+      - page: An end-to-end project
+        path: ../all/0.72.0/user-guide/guides/production-guide/end-to-end.mdx
+        icon: diagram-project
+    - section: ' LLMOps guide'
+      icon: fa-brands fa-earlybirds
+      path: ../all/0.72.0/user-guide/guides/llmops-guide.mdx
+      contents:
+      - section: RAG with ZenML
+        icon: solid robot
+        contents:
+        - page: 'Overview '
+          path: ../all/0.72.0/user-guide/guides/llmops-guide/rag-with-zenml.mdx
+          icon: robot
+        - page: RAG in 85 lines of code
+          path: ../all/0.72.0/user-guide/guides/llmops-guide/rag-with-zenml/rag-85-loc.mdx
+          icon: code
+        - page: Understanding Retrieval-Augmented Generation (RAG)
+          path: ../all/0.72.0/user-guide/guides/llmops-guide/rag-with-zenml/understanding-rag.mdx
+          icon: book
+        - page: Data ingestion and preprocessing
+          path: ../all/0.72.0/user-guide/guides/llmops-guide/rag-with-zenml/data-ingestion.mdx
+          icon: database
+        - page: Embeddings generation
+          path: ../all/0.72.0/user-guide/guides/llmops-guide/rag-with-zenml/embeddings-generation.mdx
+          icon: vector-square
+        - page: Storing embeddings in a vector database
+          path: ../all/0.72.0/user-guide/guides/llmops-guide/rag-with-zenml/storing-embeddings-in-a-vector-database.mdx
+          icon: server
+        - page: Basic RAG inference pipeline
+          path: ../all/0.72.0/user-guide/guides/llmops-guide/rag-with-zenml/basic-rag-inference-pipeline.mdx
+          icon: diagram-project
+      - section: Evaluation and metrics
+        icon: solid chart-line
+        path: ../all/0.72.0/user-guide/guides/llmops-guide/evaluation.mdx
+        contents:
+        - page: Evaluation in 65 lines of code
+          path: ../all/0.72.0/user-guide/guides/llmops-guide/evaluation/evaluation-in-65-loc.mdx
+          icon: code
+        - page: Retrieval evaluation
+          path: ../all/0.72.0/user-guide/guides/llmops-guide/evaluation/retrieval.mdx
+          icon: magnifying-glass
+        - page: Generation evaluation
+          path: ../all/0.72.0/user-guide/guides/llmops-guide/evaluation/generation.mdx
+          icon: wand-magic-sparkles
+        - page: Evaluation in practice
+          path: ../all/0.72.0/user-guide/guides/llmops-guide/evaluation/evaluation-in-practice.mdx
+          icon: flask
+      - section: Reranking for better retrieval
+        icon: solid ranking-star
+        path: ../all/0.72.0/user-guide/guides/llmops-guide/reranking.mdx
+        contents:
+        - page: Understanding reranking
+          path: ../all/0.72.0/user-guide/guides/llmops-guide/reranking/understanding-reranking.mdx
+          icon: book
+        - page: Implementing reranking in ZenML
+          path: ../all/0.72.0/user-guide/guides/llmops-guide/reranking/implementing-reranking.mdx
+          icon: code
+        - page: Evaluating reranking performance
+          path: ../all/0.72.0/user-guide/guides/llmops-guide/reranking/evaluating-reranking-performance.mdx
+          icon: chart-line
+      - section: Improve retrieval by finetuning embeddings
+        icon: solid bullseye-arrow
+        path: ../all/0.72.0/user-guide/guides/llmops-guide/finetuning-embeddings.mdx
+        contents:
+        - page: Synthetic data generation
+          path: ../all/0.72.0/user-guide/guides/llmops-guide/finetuning-embeddings/synthetic-data-generation.mdx
+          icon: robot
+        - page: Finetuning embeddings with Sentence Transformers
+          path: ../all/0.72.0/user-guide/guides/llmops-guide/finetuning-embeddings/finetuning-embeddings-with-sentence-transformers.mdx
+          icon: brain
+        - page: Evaluating finetuned embeddings
+          path: ../all/0.72.0/user-guide/guides/llmops-guide/finetuning-embeddings/evaluating-finetuned-embeddings.mdx
+          icon: chart-line
+      - page: Finetuning LLMs with ZenML
+        path: ../all/0.72.0/user-guide/guides/llmops-guide/finetuning-llms.mdx
+        icon: brain
+  - section: "\U0001F9D1\u200D\U0001F4BB Examples"
+    contents:
+    - link: Quickstart
+      href: https://github.com/zenml-io/zenml/blob/main/examples/quickstart
+      icon: rocket
+    - link: End-to-End Batch Inference
+      href: https://github.com/zenml-io/zenml/tree/main/examples/e2e
+      icon: lock
+    - link: Basic NLP with BERT
+      href: https://github.com/zenml-io/zenml/tree/main/examples/e2e_nlp
+      icon: books
+    - link: Computer Vision with YoloV8
+      href: https://github.com/zenml-io/zenml-projects/tree/main/end-to-end-computer-vision
+      icon: eye
+    - link: LLM Finetuning
+      href: https://github.com/zenml-io/zenml/tree/main/examples/llm_finetuning
+      icon: book-open
+    - link: More Projects...
+      href: https://github.com/zenml-io/zenml-projects
+      icon: puzzle-piece
+- tab: SDK
+  layout:
+  - section: "\U0001F4DA Code Docs"
+    contents:
+    - page: Python Client
+      path: ../all/0.72.0/dk/python-client.mdx
+      icon: staff-snake
+    - section: Integration Docs
+      contents:
+      - section: v1
+        contents:
+        - page: Integrations Sklearn
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-sklearn.mdx
+        - page: Integrations Kubernetes
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-kubernetes.md
+        - page: Integrations Great Expectations
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-great_expectations.md
+        - page: Integrations Comet
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-comet.md
+        - page: Integrations Pandas
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-pandas.md
+        - page: Integrations Bitbucket
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-bitbucket.md
+        - page: Integrations Pillow
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-pillow.md
+        - page: Integrations Whylogs
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-whylogs.md
+        - page: Integrations GitHub
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-github.md
+        - page: Integrations Facets
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-facets.md
+        - page: Integrations Utils
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-utils.md
+        - page: Integrations Databricks
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-databricks.md
+        - page: Integrations Pycaret
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-pycaret.md
+        - page: Integrations GitLab
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-gitlab.md
+        - page: Integrations Label Studio
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-label_studio.md
+        - page: Integrations Evidently
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-evidently.md
+        - page: Integrations Tensorflow
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-tensorflow.md
+        - page: Integrations Numpy
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-numpy.md
+        - page: Integrations Neptune
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-neptune.md
+        - page: Integrations Registry
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-registry.md
+        - page: Integrations Mlflow
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-mlflow.md
+        - page: Integrations Pytorch
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-pytorch.md
+        - page: Integrations Skypilot Azure
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-skypilot_azure.md
+        - page: Integrations Lightning
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-lightning.md
+        - page: Integrations Skypilot
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-skypilot.md
+        - page: Integrations Tensorboard
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-tensorboard.md
+        - page: Integrations Pytorch Lightning
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-pytorch_lightning.md
+        - page: Integrations Constants
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-constants.md
+        - page: Integrations Feast
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-feast.md
+        - page: Integrations Kaniko
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-kaniko.md
+        - page: Integrations Lightgbm
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-lightgbm.md
+        - page: Integrations Kubeflow
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-kubeflow.md
+        - page: Integrations Pigeon
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-pigeon.md
+        - page: Integrations Argilla
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-argilla.md
+        - page: Integrations Scipy
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-scipy.md
+        - page: Integrations Llama Index
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-llama_index.md
+        - page: Integrations Tekton
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-tekton.md
+        - page: Integrations Skypilot Lambda
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-skypilot_lambda.md
+        - page: Integrations AWS
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-aws.md
+        - page: Integrations Airflow
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-airflow.md
+        - page: Integrations Xgboost
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-xgboost.md
+        - page: Integrations Integration
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-integration.md
+        - page: Integrations GCP
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-gcp.md
+        - page: Integrations Bentoml
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-bentoml.md
+        - page: Integrations Skypilot AWS
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-skypilot_aws.md
+        - page: Integrations Prodigy
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-prodigy.md
+        - page: Integrations S3
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-s3.md
+        - page: Integrations Hyperai
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-hyperai.md
+        - page: Integrations Langchain
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-langchain.md
+        - page: Integrations Neural Prophet
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-neural_prophet.md
+        - page: Integrations Seldon
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-seldon.md
+        - page: Integrations Polars
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-polars.md
+        - page: Integrations Skypilot GCP
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-skypilot_gcp.md
+        - page: Integrations Huggingface
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-huggingface.md
+        - page: Integrations Spark
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-spark.md
+        - page: Integrations Wandb
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-wandb.md
+        - page: Integrations Azure
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-azure.md
+        - page: Integrations Discord
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-discord.md
+        - page: Integrations Openai
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-openai.md
+        - page: Integrations Deepchecks
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-deepchecks.md
+        - page: Integrations Slack
+          path: ../all/0.72.0/dk/integration-docs/v1/integrations-slack.md
+    - section: Core Code Docs
+      contents:
+      - section: v1
+        contents:
+        - page: Core Hooks
+          path: ../all/0.72.0/dk/core-sdk/v1/core-hooks.md
+        - page: Core Annotators
+          path: ../all/0.72.0/dk/core-sdk/v1/core-annotators.md
+        - page: Core Zen Stores
+          path: ../all/0.72.0/dk/core-sdk/v1/core-zen_stores.md
+        - page: Core Constants
+          path: ../all/0.72.0/dk/core-sdk/v1/core-constants.md
+        - page: Core Plugins
+          path: ../all/0.72.0/dk/core-sdk/v1/core-plugins.md
+        - page: Core Experiment Trackers
+          path: ../all/0.72.0/dk/core-sdk/v1/core-experiment_trackers.md
+        - page: Core Types
+          path: ../all/0.72.0/dk/core-sdk/v1/core-types.md
+        - page: Core Logger
+          path: ../all/0.72.0/dk/core-sdk/v1/core-logger.md
+        - page: Core Logging
+          path: ../all/0.72.0/dk/core-sdk/v1/core-logging.md
+        - page: Core Entrypoints
+          path: ../all/0.72.0/dk/core-sdk/v1/core-entrypoints.md
+        - page: Core Environment
+          path: ../all/0.72.0/dk/core-sdk/v1/core-environment.md
+        - page: Core Enums
+          path: ../all/0.72.0/dk/core-sdk/v1/core-enums.md
+        - page: Core Lineage Graph
+          path: ../all/0.72.0/dk/core-sdk/v1/core-lineage_graph.md
+        - page: Core Assistant
+          path: ../all/0.72.0/dk/core-sdk/v1/core-assistant.md
+        - page: Core Code Repositories
+          path: ../all/0.72.0/dk/core-sdk/v1/core-code_repositories.md
+        - page: Core Analytics
+          path: ../all/0.72.0/dk/core-sdk/v1/core-analytics.md
+        - page: Core Exceptions
+          path: ../all/0.72.0/dk/core-sdk/v1/core-exceptions.md
+        - page: Core Artifacts
+          path: ../all/0.72.0/dk/core-sdk/v1/core-artifacts.md
+        - page: Core Client Lazy Loader
+          path: ../all/0.72.0/dk/core-sdk/v1/core-client_lazy_loader.md
+        - page: Core Event Hub
+          path: ../all/0.72.0/dk/core-sdk/v1/core-event_hub.md
+        - page: Core Feature Stores
+          path: ../all/0.72.0/dk/core-sdk/v1/core-feature_stores.md
+        - page: Core New
+          path: ../all/0.72.0/dk/core-sdk/v1/core-new.md
+        - page: Core Model
+          path: ../all/0.72.0/dk/core-sdk/v1/core-model.md
+        - page: Core Io
+          path: ../all/0.72.0/dk/core-sdk/v1/core-io.md
+        - page: Core Utils
+          path: ../all/0.72.0/dk/core-sdk/v1/core-utils.md
+        - page: Core Services
+          path: ../all/0.72.0/dk/core-sdk/v1/core-services.md
+        - page: Core  Hub
+          path: ../all/0.72.0/dk/core-sdk/v1/core-_hub.md
+        - page: Core Metadata
+          path: ../all/0.72.0/dk/core-sdk/v1/core-metadata.md
+        - page: Core Secret
+          path: ../all/0.72.0/dk/core-sdk/v1/core-secret.md
+        - page: Core Console
+          path: ../all/0.72.0/dk/core-sdk/v1/core-console.md
+        - page: Core API
+          path: ../all/0.72.0/dk/core-sdk/v1/core-api.md
+        - page: Core Service Connectors
+          path: ../all/0.72.0/dk/core-sdk/v1/core-service_connectors.md
+        - page: Core Data Validators
+          path: ../all/0.72.0/dk/core-sdk/v1/core-data_validators.md
+        - page: Core Actions
+          path: ../all/0.72.0/dk/core-sdk/v1/core-actions.md
+        - page: Core Orchestrators
+          path: ../all/0.72.0/dk/core-sdk/v1/core-orchestrators.md
+        - page: Core Steps
+          path: ../all/0.72.0/dk/core-sdk/v1/core-steps.md
+        - page: Core Image Builders
+          path: ../all/0.72.0/dk/core-sdk/v1/core-image_builders.md
+        - page: Core Models
+          path: ../all/0.72.0/dk/core-sdk/v1/core-models.md
+        - page: Core Model Registries
+          path: ../all/0.72.0/dk/core-sdk/v1/core-model_registries.md
+        - page: Core Artifact Stores
+          path: ../all/0.72.0/dk/core-sdk/v1/core-artifact_stores.md
+        - page: Core Post Execution
+          path: ../all/0.72.0/dk/core-sdk/v1/core-post_execution.md
+        - page: Core Alerter
+          path: ../all/0.72.0/dk/core-sdk/v1/core-alerter.md
+        - page: Core Pipelines
+          path: ../all/0.72.0/dk/core-sdk/v1/core-pipelines.md
+        - page: Core Stack Deployments
+          path: ../all/0.72.0/dk/core-sdk/v1/core-stack_deployments.md
+        - page: Core Stack
+          path: ../all/0.72.0/dk/core-sdk/v1/core-stack.md
+        - page: Core Materializers
+          path: ../all/0.72.0/dk/core-sdk/v1/core-materializers.md
+        - page: Core Model Deployers
+          path: ../all/0.72.0/dk/core-sdk/v1/core-model_deployers.md
+        - page: Core Event Sources
+          path: ../all/0.72.0/dk/core-sdk/v1/core-event_sources.md
+        - page: Core Config
+          path: ../all/0.72.0/dk/core-sdk/v1/core-config.md
+        - page: Core Client
+          path: ../all/0.72.0/dk/core-sdk/v1/core-client.md
+        - page: Core Zen Server
+          path: ../all/0.72.0/dk/core-sdk/v1/core-zen_server.md
+        - page: Core Step Operators
+          path: ../all/0.72.0/dk/core-sdk/v1/core-step_operators.md
+        - page: Core Container Registries
+          path: ../all/0.72.0/dk/core-sdk/v1/core-container_registries.md
+- tab: API
+  layout:
+  - api: "\U0001F4D8 API Documentation"
+    summary: ../all/0.72.0/pi/api-reference.mdx
+    layout:
+    - GET /health
+    - auth
