@@ -68,22 +68,19 @@ def update_version_file_paths(file_path: str, version: str, is_latest: bool) -> 
     def update_paths(item):
         if isinstance(item, dict):
             for key, value in item.items():
-                if key == 'path' and isinstance(value, str):
+                if key in ['path', 'summary'] and isinstance(value, str):
+                    # Remove '../pages/' prefix if it exists
+                    value = value.replace('../pages/', '', 1)
+                    # Remove any leading '../' as well
+                    value = value.lstrip('../')
                     if version == 'develop':
-                        item[key] = f"../develop/{value.lstrip('../')}"
+                        item[key] = f"../develop/{value}"
                     elif is_latest:
-                        item[key] = f"../latest/{value.lstrip('../')}"
+                        item[key] = f"../latest/{value}"
                     else:
-                        item[key] = f"../all/{version}/{value.lstrip('../')}"
+                        item[key] = f"../all/{version}/{value}"
                 elif isinstance(value, (dict, list)):
                     update_paths(value)
-                elif key == 'summary' and isinstance(value, str):
-                    if version == 'develop':
-                        item[key] = f"../develop/{value.lstrip('../')}"
-                    elif is_latest:
-                        item[key] = f"../latest/{value.lstrip('../')}"
-                    else:
-                        item[key] = f"../all/{version}/{value.lstrip('../')}"
         elif isinstance(item, list):
             for i in item:
                 update_paths(i)
